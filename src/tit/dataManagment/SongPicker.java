@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 
 import javafx.print.Collation;
 import tit.audio.Song;

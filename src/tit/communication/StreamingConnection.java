@@ -16,10 +16,7 @@ import java.nio.ByteOrder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 
 import tit.audio.Song;
 import tit.configuration.ClientConfig;
@@ -83,7 +80,7 @@ class StreamingConnection extends Thread
 			{
 				sendSongData(clientMessage.split(ClientConfig.messageDivider)[1]);
 			} 
-			catch (IOException e) 
+			catch (IOException | UnsupportedAudioFileException e)
 			{
 				e.printStackTrace();
 			}
@@ -110,8 +107,7 @@ class StreamingConnection extends Thread
 
 
 
-	private void sendSongData(String category) throws IOException
-	{
+	private void sendSongData(String category) throws IOException, UnsupportedAudioFileException {
 		System.out.println(category);
 		//Shuffle a song
 //		Song song = songPicker.shuffle(category);
@@ -119,15 +115,7 @@ class StreamingConnection extends Thread
 		//Files to send
 //		File songFile = song.getSongFile();
 
-		File songFile = new File("D:\\projects\\RadioTit-server\\wav\\Different Pulses.wav");
-		if(category.equals("led zepplin"))
-		{
-			songFile = new File("D:\\projects\\RadioTit-server\\wav\\Good Times Bad Times.wav");
-		}
-		else if(category.equals("asaf"))
-		{
-			songFile = new File("D:\\projects\\RadioTit-server\\wav\\Different Pulses.wav");
-		}
+		File songFile = new File("C:\\Users\\Roni Admon\\project\\Radio\\RadioTit-server\\music\\Baileys.mp3");
 
 		long fileSize = songFile.length();
 		
@@ -140,22 +128,41 @@ class StreamingConnection extends Thread
 		String albumName = "album name";
 		String artistName = "artist name";
 
-		AudioFileFormat audioFileFormat = null;
-		try
-		{
-			audioFileFormat = AudioSystem.getAudioFileFormat(songFile);
-		}
-		catch (UnsupportedAudioFileException e) 
-		{
-			e.printStackTrace();
-		}
+//		AudioFileFormat audioFileFormat = null;
+//		try
+//		{
+//			audioFileFormat = AudioSystem.getAudioFileFormat(songFile);
+//		}
+//		catch (UnsupportedAudioFileException e)
+//		{
+//			e.printStackTrace();
+//		}
 
-		AudioFormat format = audioFileFormat.getFormat();
-		float sampleRate = format.getSampleRate();
-		int sampleSizeInBits = format.getSampleSizeInBits();
-		int channels = format.getChannels();
+
+//		AudioFormat format = audioFileFormat.getFormat();
+//		float sampleRate = format.getSampleRate();
+//		int sampleSizeInBits = format.getSampleSizeInBits();
+//		int channels = format.getChannels();
+//		boolean signed = true;
+//		boolean bigEndian = format.isBigEndian();
+
+		AudioInputStream in= AudioSystem.getAudioInputStream(songFile);
+		AudioInputStream din = null;
+		AudioFormat baseFormat = in.getFormat();
+		AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+				baseFormat.getSampleRate(),
+				16,
+				baseFormat.getChannels(),
+				baseFormat.getChannels() * 2,
+				baseFormat.getSampleRate(),
+				false);
+		din = AudioSystem.getAudioInputStream(decodedFormat, in);
+
+		float sampleRate = decodedFormat.getSampleRate();
+		int sampleSizeInBits = decodedFormat.getSampleSizeInBits();
+		int channels = decodedFormat.getChannels();
 		boolean signed = true;
-		boolean bigEndian = format.isBigEndian();
+		boolean bigEndian = decodedFormat.isBigEndian();
 
 		System.out.println("song : "+ songName);
 		System.out.println("album : "+ albumName);
@@ -221,10 +228,15 @@ class StreamingConnection extends Thread
 			int count = 0;
 			//Send the file's content
 			System.out.println(getClass() + " sending song...");
-			while((count = songBis.read(songBytes)) > 0)
+//			while((count = songBis.read(songBytes)) > 0)
+//			{
+//				out.write(songBytes, 0, count);
+//			}
+			while((count = din.read(songBytes)) > 0)
 			{
 				out.write(songBytes, 0, count);
 			}
+
 			System.out.println(getClass() + " song sent...");
 
 		}
@@ -330,17 +342,17 @@ class StreamingConnection extends Thread
 			//Create output stream
 			out = new BufferedOutputStream(clientSocket.getOutputStream());
 
-			DBUtil dbUtil = new DBUtil();
-			ArrayList<String> categories = dbUtil.getCategories();
-
+//			DBUtil dbUtil = new DBUtil();
+//			ArrayList<String> categories = dbUtil.getCategories();
+//
 			StringBuffer strbuf = new StringBuffer();
 
 			//Default category
 			strbuf.append(GeneralConfig.randomCategory);
-			for(String s : categories)
-			{
-				strbuf.append(",").append(s);
-			}
+//			for(String s : categories)
+//			{
+//				strbuf.append(",").append(s);
+//			}
 
 			String stringToSend = strbuf.toString();
 			stringToSend.substring(0,stringToSend.length() - 1);

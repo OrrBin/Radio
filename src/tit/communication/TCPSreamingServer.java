@@ -28,7 +28,8 @@ public class TCPSreamingServer {
 				String clientIP = clientSocket.getInetAddress().toString();
 				if(!clientsPickers.containsKey(clientIP))
 				{
-					SongPicker sp = new SongPicker();
+//					SongPicker sp = new SongPicker();
+					SongPicker sp = null;
 					clientsPickers.put(clientIP, sp);
 				}
 				

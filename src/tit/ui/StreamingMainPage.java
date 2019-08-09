@@ -57,6 +57,8 @@ public class StreamingMainPage extends JFrame
 		streamingClient = new TCPStreamingClient(ServerConfig.serverIP, ServerConfig.serverPort, dataManager.getClientBaseFolder());
 		executor = Executors.newFixedThreadPool(1);
 
+		System.out.println("initiated streaming client");
+
 		categories = tcpClient.getCategories();
 
 		PlayerPropetrties playerPropetrties = streamingClient.getSongPlayer("led zepplin");
@@ -111,6 +113,8 @@ public class StreamingMainPage extends JFrame
 		player.waveForm.setColors(mpc);
 //		controlPanel.setPlayingThread(player, mpc);
 		executor.submit(player);
+
+		System.out.println("finished constructing Main Page");
 	}
 
 	public static void main(String[] args) throws IOException, CommunicationException, LineUnavailableException 

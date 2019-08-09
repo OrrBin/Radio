@@ -29,7 +29,7 @@ public class SongStream
 			this.setSongImage(new File("D:\\projects\\RadioTit-server\\images\\Different Pulses.jpg"));
 
 		else if(genere.equals("led zepplin"))
-			this.setSongImage(new File("D:\\projects\\\\RadioTit-server\\images\\Led Zeppelin.jpg"));
+			this.setSongImage(new File("D:\\projects\\\\RadioTit-server\\images\\Baileys.jpg"));
 	}
 
 	public String getSongName() {

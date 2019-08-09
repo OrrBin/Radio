@@ -5,12 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineListener;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.*;
 
 import tit.configuration.ClientConfig;
 import tit.configuration.UIConfig;
@@ -27,6 +22,8 @@ public class PlayingThread implements Runnable
 	private boolean isPlaying;
 	private boolean isTerminated;
 	private boolean isDone;
+
+	private AudioInputStream din;
 
 	public WaveFormPanel waveForm;
 
@@ -48,6 +45,8 @@ public class PlayingThread implements Runnable
 		isTerminated = false;
 		isDone = false;
 
+//		din = new AudioInputStream(bis, format, -1L);
+
 		waveForm = new WaveFormPanel(UIConfig.frameWidth, 128);
 	}
 
@@ -68,9 +67,49 @@ public class PlayingThread implements Runnable
 		isTerminated = false;
 	}
 
+	private void rawplay(AudioFormat targetFormat, AudioInputStream din) throws IOException,                                                                                                LineUnavailableException
+	{
+		byte[] data = new byte[4096];
+		SourceDataLine line = getLine(targetFormat);
+		if (line != null)
+		{
+			// Start
+			line.start();
+			int nBytesRead = 0, nBytesWritten = 0;
+			while (nBytesRead != -1)
+			{
+				nBytesRead = din.read(data, 0, data.length);
+				if (nBytesRead != -1) nBytesWritten = line.write(data, 0, nBytesRead);
+			}
+			// Stop
+			line.drain();
+			line.stop();
+			line.close();
+			din.close();
+		}
+	}
+
+	private SourceDataLine getLine(AudioFormat audioFormat) throws LineUnavailableException
+	{
+		SourceDataLine res = null;
+		DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+		res = (SourceDataLine) AudioSystem.getLine(info);
+		res.open(audioFormat);
+		return res;
+	}
+
+
 	@Override
 	public void run() 
-	{		
+	{
+
+//		try {
+//			rawplay(format, din);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (LineUnavailableException e) {
+//			e.printStackTrace();
+//		}
 		//		line.start();
 
 		int count = 0;
@@ -84,13 +123,14 @@ public class PlayingThread implements Runnable
 
 		float[] samples = new float[DEF_BUFFER_SAMPLE_SZ * audioFormat.getChannels()];
 		long[] transfer = new long[samples.length];
-		byte[] bytes = new byte[samples.length * normalBytes];
+//		byte[] bytes = new byte[samples.length * normalBytes];
+		byte[] bytes = new byte[4096];
 
 		try
 		{
-			line.open(format, bytes.length);
-		} 
-		catch (LineUnavailableException e1) 
+			line.open(format);
+		}
+		catch (LineUnavailableException e1)
 		{
 			e1.printStackTrace();
 		}
@@ -101,7 +141,7 @@ public class PlayingThread implements Runnable
 			line.write(bytes, 0, bytes.length);
 		}
 
-		try 
+		try
 		{
 			do
 			{
@@ -114,13 +154,13 @@ public class PlayingThread implements Runnable
 						line.flush();
 						line.close();
 						line = null;
-						try 
+						try
 						{
 							bis.close();
 							socket.close();
 							//						is.close();
 						}
-						catch (IOException e) 
+						catch (IOException e)
 						{
 							e.printStackTrace();
 						}
@@ -130,6 +170,7 @@ public class PlayingThread implements Runnable
 					}
 				}
 
+//				count = bis.read(bytes);
 				count = bis.read(bytes);
 
 				samples = unpack(bytes, transfer, samples, count, audioFormat);
@@ -143,17 +184,17 @@ public class PlayingThread implements Runnable
 			while(count > 0);
 
 		}
-		catch (IOException e) 
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 
-		try 
+		try
 		{
 			bis.close();
 			socket.close();
 		}
-		catch (IOException e) 
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}

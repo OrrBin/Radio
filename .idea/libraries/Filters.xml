@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Filters">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Filters.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jfxrt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jid3lib-0.5.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jmf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/mediaplayer.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
