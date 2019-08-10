@@ -12,7 +12,6 @@ public class ServerConfig
 	public static final String musicFolder = baseFolder + "\\music";
 	public static final String imagesFolder = baseFolder + "\\images";
 
-	
 	//Server side requests (Strings)
 	public static final String SHiThereString = "hi";
 
@@ -26,8 +25,7 @@ public class ServerConfig
 	public static final int serverPort = 5801;
 
 	//Server IP
-//	public static final String serverIP = "orrbob.ddns.net";
-	public static final String serverIP = "localhost";
+	public static final String serverAddr = "localhost"; //TODO : change it!
 	
 	public static final int NUMBER_HEADER_SIZE = 4;
 	public static final int LONG_NUMBER_HEADER_SIZE = 8;

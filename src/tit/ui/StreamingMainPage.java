@@ -53,8 +53,8 @@ public class StreamingMainPage extends JFrame
 	public StreamingMainPage() throws UnknownHostException, CommunicationException, IOException, LineUnavailableException 
 	{
 		dataManager = new DataManagmentUtilities();
-		tcpClient = new TCPClient(ServerConfig.serverIP, ServerConfig.serverPort, dataManager.getClientBaseFolder());
-		streamingClient = new TCPStreamingClient(ServerConfig.serverIP, ServerConfig.serverPort, dataManager.getClientBaseFolder());
+		tcpClient = new TCPClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
+		streamingClient = new TCPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
 		executor = Executors.newFixedThreadPool(1);
 
 		System.out.println("initiated streaming client");

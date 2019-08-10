@@ -9,7 +9,7 @@ import java.util.HashMap;
 import tit.configuration.ServerConfig;
 import tit.dataManagment.SongPicker;
 
-public class TCPSreamingServer {   
+public class TCPSreamingServer extends Thread{
 
 	static HashMap<String, SongPicker> clientsPickers;
 
@@ -39,35 +39,9 @@ public class TCPSreamingServer {
 		catch(IOException e) {  
 			System.out.println("Listen :"+e.getMessage());}   
 	}  
-}  
+}
 
-
-
-
-
-
-
-//	public static void main(String args[]) throws Exception
-//	{
-//		String clientSentence;
-//		String capitalizedSentence;
-//		ServerSocket welcomeSocket = new ServerSocket(6789);
-//
-//		while(true)
-//		{
-//			Socket connectionSocket = welcomeSocket.accept();
-//			BufferedReader inFromClient =
-//					new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-//			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-//			clientSentence = inFromClient.readLine();
-//			System.out.println("Received: " + clientSentence);
-//			capitalizedSentence = clientSentence.toUpperCase() + '\n';
-//			outToClient.writeBytes(capitalizedSentence);
-//		}
-//	}
-
-
-//TODO : function for the server 
+//TODO : function for the server
 //	public static byte[] leIntToByteArray(int i) {
 //	    final ByteBuffer bb = ByteBuffer.allocate(Integer.SIZE / Byte.SIZE);
 //	    bb.order(ByteOrder.LITTLE_ENDIAN);

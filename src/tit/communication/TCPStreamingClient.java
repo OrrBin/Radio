@@ -86,7 +86,7 @@ public class TCPStreamingClient
 
 		
 		
-		clientSocket = new Socket(ServerConfig.serverIP, ServerConfig.serverPort);
+		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
 
 		output = new DataOutputStream(clientSocket.getOutputStream()); 
 		//Ask for a new Song
@@ -305,7 +305,7 @@ public class TCPStreamingClient
 
 	public String[] getCategories() throws IOException
 	{
-		clientSocket = new Socket(ServerConfig.serverIP, ServerConfig.serverPort);
+		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
 
 		output = new DataOutputStream( clientSocket.getOutputStream()); 
 
@@ -384,9 +384,9 @@ public class TCPStreamingClient
 		//		System.out.println("FROM SERVER: " + modifiedSentence);
 		//		clientSocket.close();
 
-//		TCPClient tcp = new TCPClient(ServerConfig.serverIP, ServerConfig.serverPort, new File("D:\\RadioTit-client"));
+//		TCPClient tcp = new TCPClient(ServerConfig.serverAddr, ServerConfig.serverPort, new File("D:\\RadioTit-client"));
 		
-		TCPStreamingClient streamingClient = new TCPStreamingClient(ServerConfig.serverIP, ServerConfig.serverPort, new File("D:\\RadioTit-client"));
+		TCPStreamingClient streamingClient = new TCPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort, new File("D:\\RadioTit-client"));
 		//		Thread.sleep(1000);
 		//		tcp.getSongFromServer(new File("C:\\orr\\songs\\tcpTest"), "asaf");
 //		streamingClient.getSongPlayer("asaf");
