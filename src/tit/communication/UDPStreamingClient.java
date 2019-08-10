@@ -1,7 +1,7 @@
 package tit.communication;
 
 import com.mysql.fabric.xmlrpc.Client;
-import tit.audio.PlayerPropetrties;
+import tit.audio.PlayerPropetrtiesUDP;
 import tit.audio.SongStream;
 import tit.configuration.ClientConfig;
 import tit.configuration.ServerConfig;
@@ -32,13 +32,13 @@ public class UDPStreamingClient {
     private byte[] buf;
 
     public UDPStreamingClient(File ClientDirectory) throws SocketException, UnknownHostException {
-        socket = new DatagramSocket();
+        clientSocket = new DatagramSocket();
         address = InetAddress.getByName (ClientConfig.ServerAddr);
         this.musicDirectory = new File(ClientDirectory.getPath() + ClientConfig.DefaultMusicFolder);
         this.imagesDirectory = new File(ClientDirectory.getPath() + ClientConfig.DefaultImagesFolder);
 
     }
-
+// TOOD : delete after changing Orr's code to handle UDP send(?)&receive
     public String sendEcho(String msg) {
         buf = msg.getBytes();
         DatagramPacket packet
@@ -56,9 +56,9 @@ public class UDPStreamingClient {
     }
 
 
-    public PlayerPropetrties getSongPlayer(String category) throws IOException
+    public PlayerPropetrtiesUDP getSongPlayer(String category) throws IOException
     {
-        PlayerPropetrties playerPropetrties = null;
+        PlayerPropetrtiesUDP playerPropetrties = null;
 
         InputStream is = null;
         FileOutputStream songFos = null;
@@ -186,7 +186,7 @@ public class UDPStreamingClient {
             System.out.println("bigEndian : "+ bigEndian);
 
             //TODO : add genere and image
-            playerPropetrties = new PlayerPropetrties(clientSocket, bis, format, bufferSize, fileSize, new SongStream(songName, albumName, artistName, category));
+            playerPropetrties = new PlayerPropetrtiesUDP(clientSocket, bis, format, bufferSize, fileSize, new SongStream(songName, albumName, artistName, category));
 
         }
         catch(Exception e)
@@ -200,9 +200,10 @@ public class UDPStreamingClient {
 
     public String[] getCategories() throws IOException
     {
-        clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
+        clientSocket = new DatagramSocket();
+        //Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
 
-        output = new DataOutputStream( clientSocket.getOutputStream());
+        output = new DataOutputStream(clientSocket.getOutputStream());
 
         //Ask for a new Song
         try	{
