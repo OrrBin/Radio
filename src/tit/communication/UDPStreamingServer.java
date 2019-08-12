@@ -1,51 +1,42 @@
 package tit.communication;
 
 import tit.configuration.ServerConfig;
+import tit.dataManagment.SongPicker;
+import tit.objects.ClientState;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 public class UDPStreamingServer extends Thread {
 
-    private DatagramSocket socket;
-    private boolean running;
-    private byte[] buf = new byte[256];
-
-    public void Server() throws SocketException {
-        socket = new DatagramSocket(ServerConfig.serverPort);
-    }
-
-    public void run() {
-        running = true;
-
-        while (running) {
-            DatagramPacket packet
-                    = new DatagramPacket(buf, buf.length);
-            try {
-                socket.receive(packet);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            InetAddress address = packet.getAddress();
-            int port = packet.getPort();
-            packet = new DatagramPacket(buf, buf.length, address, port);
-            String received
-                    = new String(packet.getData(), 0, packet.getLength());
-
-            if (received.equals("end")) {
-                running = false;
-                continue;
-            }
-            try {
-                socket.send(packet);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        socket.close();
-    }
+	static HashMap<InetAddress, File> clients = new HashMap<>();
+	
+	public static void main (String args[]) throws ClassNotFoundException, SQLException   
+	{   
+		try
+		{   
+			
+			//Create new listening socket
+			ServerSocket listenSocket = new ServerSocket(ServerConfig.serverPort);   
+		
+			System.out.println("server start listening... ... ...");  
+			while(true) {   
+				Socket clientSocket = listenSocket.accept(); 
+				InetAddress address = listenSocket.getInetAddress();
+				clients.put(address, StreamingConnectionUDP.songFile);
+				
+				new StreamingConnectionUDP(clientSocket);   
+			}   
+		}   
+		catch(IOException e) {  
+			System.out.println("Listen :"+e.getMessage());}   
+	}  
 }

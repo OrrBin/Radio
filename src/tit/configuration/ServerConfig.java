@@ -27,6 +27,8 @@ public class ServerConfig
 	//Server IP
 	public static final String serverAddr = "localhost"; //TODO : change it!
 	
+	public static final int DATAGRAM_PACKET_SIZE = 4096;
+	
 	public static final int NUMBER_HEADER_SIZE = 4;
 	public static final int LONG_NUMBER_HEADER_SIZE = 8;
 	public static final int BOOLEAN_HEADER_SIZE = 4;

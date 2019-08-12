@@ -3,6 +3,7 @@ package tit.configuration;
 public class ClientConfig
 {
 	public static final int ServerPort = 5801;
+	public static final int UdpPort = 5802;
 	public static final String ServerAddr = "localhost"; //TODO: change it!
 	public static final String ClientDir = "C:\\Users\\RadioTit-client";
 	public static final String DefaultClientFolderName = "\\RadioTit-clientSide";
@@ -12,6 +13,7 @@ public class ClientConfig
 
 	//Client side requests
 	public static final String CsendMeNewSongString = "sendSong";
+	public static final String CsendMeAudioData = "sendAudioData";
 	public static final String CsendMeNewImageString = "sendImage";
 	public static final String CsendMeCategoriesString = "sendCategories";
 

@@ -38,6 +38,7 @@ public class PlayingThread implements Runnable
 		this.setFileSize(p.getFileSize());
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class, p.getFormat());
 		this.line = (SourceDataLine) AudioSystem.getLine(info);
+		System.out.println("info " + info.toString());
 		this.line.addLineListener(l);
 		//		this.line.open(p.getFormat());
 		this.format = p.getFormat();
@@ -60,6 +61,7 @@ public class PlayingThread implements Runnable
 		this.bytes = new byte[bufferSize];
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 		this.line = (SourceDataLine) AudioSystem.getLine(info);
+		System.out.println("info " + info.toString());
 		this.line.addLineListener(lineListener);
 		//		this.line.open(format);
 		this.format = format;
@@ -67,27 +69,6 @@ public class PlayingThread implements Runnable
 		isTerminated = false;
 	}
 
-	private void rawplay(AudioFormat targetFormat, AudioInputStream din) throws IOException,                                                                                                LineUnavailableException
-	{
-		byte[] data = new byte[4096];
-		SourceDataLine line = getLine(targetFormat);
-		if (line != null)
-		{
-			// Start
-			line.start();
-			int nBytesRead = 0, nBytesWritten = 0;
-			while (nBytesRead != -1)
-			{
-				nBytesRead = din.read(data, 0, data.length);
-				if (nBytesRead != -1) nBytesWritten = line.write(data, 0, nBytesRead);
-			}
-			// Stop
-			line.drain();
-			line.stop();
-			line.close();
-			din.close();
-		}
-	}
 
 	private SourceDataLine getLine(AudioFormat audioFormat) throws LineUnavailableException
 	{

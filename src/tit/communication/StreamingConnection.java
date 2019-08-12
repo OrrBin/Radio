@@ -23,6 +23,7 @@ import tit.configuration.ClientConfig;
 import tit.configuration.GeneralConfig;
 import tit.configuration.ServerConfig;
 import tit.dataManagment.SongPicker;
+import tit.dbUtilities.AudioUtil;
 import tit.dbUtilities.DBUtil;
 import utilities.Util;
 
@@ -115,7 +116,7 @@ class StreamingConnection extends Thread
 		//Files to send
 //		File songFile = song.getSongFile();
 
-		File songFile = new File("C:\\Users\\Roni Admon\\project\\Radio\\RadioTit-server\\music\\Baileys.mp3");
+		File songFile = new File("D:\\projects\\Radio\\RadioTit-server\\music\\Baileys.mp3");
 
 		long fileSize = songFile.length();
 		
@@ -128,36 +129,9 @@ class StreamingConnection extends Thread
 		String albumName = "album name";
 		String artistName = "artist name";
 
-//		AudioFileFormat audioFileFormat = null;
-//		try
-//		{
-//			audioFileFormat = AudioSystem.getAudioFileFormat(songFile);
-//		}
-//		catch (UnsupportedAudioFileException e)
-//		{
-//			e.printStackTrace();
-//		}
-
-
-//		AudioFormat format = audioFileFormat.getFormat();
-//		float sampleRate = format.getSampleRate();
-//		int sampleSizeInBits = format.getSampleSizeInBits();
-//		int channels = format.getChannels();
-//		boolean signed = true;
-//		boolean bigEndian = format.isBigEndian();
-
-		AudioInputStream in= AudioSystem.getAudioInputStream(songFile);
-		AudioInputStream din = null;
-		AudioFormat baseFormat = in.getFormat();
-		AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
-				baseFormat.getSampleRate(),
-				16,
-				baseFormat.getChannels(),
-				baseFormat.getChannels() * 2,
-				baseFormat.getSampleRate(),
-				false);
-		din = AudioSystem.getAudioInputStream(decodedFormat, in);
-
+		AudioInputStream din = AudioUtil.getFAudioInputStream(songFile);
+		AudioFormat decodedFormat = AudioUtil.getFormat(songFile);
+		
 		float sampleRate = decodedFormat.getSampleRate();
 		int sampleSizeInBits = decodedFormat.getSampleSizeInBits();
 		int channels = decodedFormat.getChannels();

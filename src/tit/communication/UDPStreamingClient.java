@@ -1,271 +1,230 @@
 package tit.communication;
 
-import com.mysql.fabric.xmlrpc.Client;
-import tit.audio.PlayerPropetrtiesUDP;
-import tit.audio.SongStream;
-import tit.configuration.ClientConfig;
-import tit.configuration.ServerConfig;
-import utilities.Util;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.SourceDataLine;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import javax.naming.CommunicationException;
+import javax.security.auth.login.Configuration;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.TargetDataLine;
+import javax.xml.transform.Source;
 
+import com.sun.media.jfxmedia.track.Track.Encoding;
+
+import tit.audio.PlayerPropetrties;
+import tit.audio.PlayingThread;
+import tit.audio.Song;
+import tit.audio.SongStream;
+import tit.configuration.ClientConfig;
+import tit.configuration.DataManagmenetConfig;
+import tit.configuration.ServerConfig;
+import tit.dataManagment.DataManagmentUtilities;
+import tit.ui.StreamingMainPage.TitLineListener;
+import utilities.Util;
+
+/**
+ * 
+ *  
+ *
+ */
 public class UDPStreamingClient {
-    private DatagramSocket clientSocket;
-    private InetAddress address;
 
-    private DataOutputStream output;
-    private DataInputStream input;
+	Socket clientSocket;
+	DataOutputStream output;
+	DataInputStream input;
 
-    private DataOutputStream outToServer;
-    private InputStreamReader inFromServer;
-    private BufferedReader stringInFromServer;
+	DataOutputStream outToServer;
+	InputStreamReader inFromServer;
+	BufferedReader stringInFromServer;
 
-    private File musicDirectory;
-    private File imagesDirectory;
+	private File musicDirectory;
+	private File imagesDirectory;
 
-    private byte[] buf;
+	public UDPStreamingClient(String server, int port, File baseDirectory)
+			throws UnknownHostException, IOException, CommunicationException {
+		this.musicDirectory = new File(baseDirectory.getPath() + ClientConfig.DefaultMusicFolder);
+		this.imagesDirectory = new File(baseDirectory.getPath() + ClientConfig.DefaultImagesFolder);
+	}
 
-    public UDPStreamingClient(File ClientDirectory) throws SocketException, UnknownHostException {
-        clientSocket = new DatagramSocket();
-        address = InetAddress.getByName (ClientConfig.ServerAddr);
-        this.musicDirectory = new File(ClientDirectory.getPath() + ClientConfig.DefaultMusicFolder);
-        this.imagesDirectory = new File(ClientDirectory.getPath() + ClientConfig.DefaultImagesFolder);
+	public PlayerPropetrties getSongPlayer(String category) throws IOException {
+		PlayerPropetrties playerPropetrties = null;
 
-    }
-// TOOD : delete after changing Orr's code to handle UDP send(?)&receive
-    public String sendEcho(String msg) {
-        buf = msg.getBytes();
-        DatagramPacket packet
-                = new DatagramPacket(buf, buf.length, address, ClientConfig.ServerPort);
-        clientSocket.send(packet);
-        packet = new DatagramPacket(buf, buf.length);
-        clientSocket.receive(packet);
-        String received = new String(
-                packet.getData(), 0, packet.getLength());
-        return received;
-    }
+		InputStream is = null;
+		FileOutputStream songFos = null;
+		FileOutputStream imageFos = null;
+		BufferedOutputStream songBos = null;
+		BufferedOutputStream imageBos = null;
 
-    public void close() {
-        clientSocket.close();
-    }
+		ByteArrayOutputStream baos = null;
 
+		SourceDataLine line;
+		AudioFormat format;
 
-    public PlayerPropetrtiesUDP getSongPlayer(String category) throws IOException
-    {
-        PlayerPropetrtiesUDP playerPropetrties = null;
+		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
 
-        InputStream is = null;
-        FileOutputStream songFos = null;
-        FileOutputStream imageFos = null;
-        BufferedOutputStream songBos = null;
-        BufferedOutputStream imageBos = null;
+		output = new DataOutputStream(clientSocket.getOutputStream());
+		// Ask for a new Song
+		try {
+			output.writeBytes(ClientConfig.CsendMeNewSongString + ClientConfig.messageDivider + category
+					+ System.lineSeparator());
+		} catch (IOException e) {
+			System.out.println(this.getClass() + " Can't ask for a song");
+			e.printStackTrace();
+		}
 
-        ByteArrayOutputStream baos = null;
+		BufferedInputStream bis;
+		long fileSize;
+		int bufferSize = 0;
+		String songName, albumName, artistName;
+		float sampleRate;
+		int sampleSizeInBits, channels = 0;
+		boolean signed, bigEndian;
+		try {
+			is = clientSocket.getInputStream();
+			bufferSize = clientSocket.getReceiveBufferSize();
+			byte[] bytes = new byte[bufferSize];
 
-        SourceDataLine line;
-        AudioFormat format;
+			bis = new BufferedInputStream(is);
 
-        clientSocket = new DatagramSocket();
+			int count = 0;
+			int headerSize;
+			byte[] sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
+			byte[] headerBytes;
 
-        output = new DataOutputStream(clientSocket.getOutputStream());
-        //Ask for a new Song
-        try
-        {
-            output.writeBytes(ClientConfig.CsendMeNewSongString +
-                    ClientConfig.messageDivider + category + System.lineSeparator() );
-        }
-        catch (IOException e)
-        {
-            System.out.println(this.getClass() + " Can't ask for a song");
-            e.printStackTrace();
-        }
+			/************* Reading song properties headers *************/
+			// Read song name size header (int - 32 bit / 4 bytes)
+			count += bis.read(sizeBytes, count, ServerConfig.SONG_NAME_SIZE_HEADER_SIZE);
+			headerSize = Util.byteArrayToLeInt(sizeBytes);
+			headerBytes = new byte[headerSize];
+			sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
 
+			// Read song name header
+			count += bis.read(headerBytes, 0, headerSize);
+			songName = Util.byteArrayToString(headerBytes);
+			headerBytes = null;
 
+			// Read album name size header (int - 32 bit / 4 bytes)
+			count += bis.read(sizeBytes, 0, ServerConfig.ALBUM_NAME_SIZE_HEADER_SIZE);
+			headerSize = Util.byteArrayToLeInt(sizeBytes);
+			headerBytes = new byte[headerSize];
+			sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
 
-        BufferedInputStream bis;
-        long fileSize;
-        int bufferSize = 0;
-        String songName, albumName, artistName;
-        float sampleRate;
-        int sampleSizeInBits, channels = 0;
-        boolean signed, bigEndian;
-        try
-        {
-            is = clientSocket.getInputStream();
-            bufferSize = clientSocket.getReceiveBufferSize();
-            byte[] bytes = new byte[bufferSize];
+			// Read album name header
+			count += bis.read(headerBytes, 0, headerSize);
+			albumName = Util.byteArrayToString(headerBytes);
+			headerBytes = null;
 
-            bis = new BufferedInputStream(is);
+			// Read artist name size header (int - 32 bit / 4 bytes)
+			count += bis.read(sizeBytes, 0, ServerConfig.ARTIST_NAME_SIZE_HEADER_SIZE);
+			headerSize = Util.byteArrayToLeInt(sizeBytes);
+			headerBytes = new byte[headerSize];
+			sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
 
-            int count = 0;
-            int headerSize;
-            byte[] sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
-            byte[] headerBytes;
+			// Read artist name header
+			count += bis.read(headerBytes, 0, headerSize);
+			artistName = Util.byteArrayToString(headerBytes);
+			headerBytes = null;
 
-            /************* Reading song properties headers *************/
-            //Read song name size header (int - 32 bit / 4 bytes)
-            count += bis.read(sizeBytes, count, ServerConfig.SONG_NAME_SIZE_HEADER_SIZE);
-            headerSize = Util.byteArrayToLeInt(sizeBytes);
-            headerBytes = new byte[headerSize];
-            sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
+			/*************** Reading song file properties headers *****************/
+			// Read song file size in bytes
+			headerBytes = new byte[ServerConfig.FILE_SIZE_HEADER_SIZE];
+			count += bis.read(headerBytes, 0, ServerConfig.FILE_SIZE_HEADER_SIZE);
+			fileSize = Util.byteArrayToLong(headerBytes);
 
-            //Read song name header
-            count += bis.read(headerBytes, 0, headerSize);
-            songName = Util.byteArrayToString(headerBytes);
-            headerBytes = null;
+			/************* Reading AudioFormat properties headers *************/
+			// Read sample rate header (float - 32 bit / 4 bytes )
+			headerBytes = new byte[ServerConfig.SAMPLE_RATE_HEADER_SIZE];
+			count += bis.read(headerBytes, 0, ServerConfig.SAMPLE_RATE_HEADER_SIZE);
+			sampleRate = Util.byteArrayToFloat(headerBytes);
 
-            //Read album name size header (int - 32 bit / 4 bytes)
-            count += bis.read(sizeBytes, 0, ServerConfig.ALBUM_NAME_SIZE_HEADER_SIZE);
-            headerSize = Util.byteArrayToLeInt(sizeBytes);
-            headerBytes = new byte[headerSize];
-            sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
+			// Read sample size in bits header (int - 32 bit / 4 bytes)
+			headerBytes = new byte[ServerConfig.SAMPLE_SIZE_IN_BITS_HEADER_SIZE];
+			count += bis.read(headerBytes, 0, ServerConfig.SAMPLE_SIZE_IN_BITS_HEADER_SIZE);
+			sampleSizeInBits = Util.byteArrayToLeInt(headerBytes);
 
-            //Read album name header
-            count += bis.read(headerBytes, 0, headerSize);
-            albumName = Util.byteArrayToString(headerBytes);
-            headerBytes = null;
+			// Read channels header (int - 32 bit / 4 bytes)
+			headerBytes = new byte[ServerConfig.CHANNELS_HEADER_SIZE];
+			count += bis.read(headerBytes, 0, ServerConfig.CHANNELS_HEADER_SIZE);
+			channels = Util.byteArrayToLeInt(headerBytes);
 
-            //Read artist name size header (int - 32 bit / 4 bytes)
-            count += bis.read(sizeBytes, 0, ServerConfig.ARTIST_NAME_SIZE_HEADER_SIZE);
-            headerSize = Util.byteArrayToLeInt(sizeBytes);
-            headerBytes = new byte[headerSize];
-            sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
+			// Read signed header (boolean - 1 byte)
+			headerBytes = new byte[ServerConfig.SIGNED_HEADER_SIZE];
+			count += bis.read(headerBytes, 0, ServerConfig.SIGNED_HEADER_SIZE);
+			signed = Util.byteArrayToBoolean(headerBytes);
 
-            //Read artist name header
-            count += bis.read(headerBytes, 0, headerSize);
-            artistName = Util.byteArrayToString(headerBytes);
-            headerBytes = null;
+			// Read BigEndian header (boolean - 1 byte)
+			headerBytes = new byte[ServerConfig.BIGENDIAN_HEADER_SIZE];
+			count += bis.read(headerBytes, 0, ServerConfig.BIGENDIAN_HEADER_SIZE);
+			bigEndian = Util.byteArrayToBoolean(headerBytes);
 
-            /*************** Reading song file properties headers *****************/
-            //Read song file size in bytes
-            headerBytes = new byte[ServerConfig.FILE_SIZE_HEADER_SIZE];
-            count += bis.read(headerBytes, 0, ServerConfig.FILE_SIZE_HEADER_SIZE);
-            fileSize = Util.byteArrayToLong(headerBytes);
+			format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
 
-            /************* Reading AudioFormat properties headers *************/
-            //Read sample rate header (float - 32 bit / 4 bytes )
-            headerBytes = new byte[ServerConfig.SAMPLE_RATE_HEADER_SIZE];
-            count += bis.read(headerBytes, 0, ServerConfig.SAMPLE_RATE_HEADER_SIZE);
-            sampleRate = Util.byteArrayToFloat(headerBytes);
+			System.out.println("song : " + songName);
+			System.out.println("album : " + albumName);
+			System.out.println("artist : " + artistName);
+			System.out.println("sample rate : " + sampleRate);
+			System.out.println("sample size in bits : " + sampleSizeInBits);
+			System.out.println("channels : " + channels);
+			System.out.println("signed : " + signed);
+			System.out.println("bigEndian : " + bigEndian);
 
-            //Read sample size in bits header (int - 32 bit / 4 bytes)
-            headerBytes = new byte[ServerConfig.SAMPLE_SIZE_IN_BITS_HEADER_SIZE];
-            count += bis.read(headerBytes, 0, ServerConfig.SAMPLE_SIZE_IN_BITS_HEADER_SIZE);
-            sampleSizeInBits = Util.byteArrayToLeInt(headerBytes);
+			// TODO : add genere and image
+			playerPropetrties = new PlayerPropetrties(clientSocket, bis, format, bufferSize, fileSize,
+					new SongStream(songName, albumName, artistName, category));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-            //Read channels header (int - 32 bit / 4 bytes)
-            headerBytes = new byte[ServerConfig.CHANNELS_HEADER_SIZE];
-            count += bis.read(headerBytes, 0, ServerConfig.CHANNELS_HEADER_SIZE);
-            channels = Util.byteArrayToLeInt(headerBytes);
+		return playerPropetrties;
 
-            //Read signed header (boolean - 1 byte)
-            headerBytes = new byte[ServerConfig.SIGNED_HEADER_SIZE];
-            count += bis.read(headerBytes, 0, ServerConfig.SIGNED_HEADER_SIZE);
-            signed = Util.byteArrayToBoolean(headerBytes);
+	}
+	
+	public void getAudioData() throws IOException {
 
-            //Read BigEndian header (boolean - 1 byte)
-            headerBytes = new byte[ServerConfig.BIGENDIAN_HEADER_SIZE];
-            count += bis.read(headerBytes, 0, ServerConfig.BIGENDIAN_HEADER_SIZE);
-            bigEndian = Util.byteArrayToBoolean(headerBytes);
+		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
 
-            format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+		output = new DataOutputStream(clientSocket.getOutputStream());
+		// Ask for a new Song
+		try {
+			output.writeBytes(ClientConfig.CsendMeAudioData + ClientConfig.messageDivider + System.lineSeparator());
+		} catch (IOException e) {
+			System.out.println(this.getClass() + " Can't ask for a song");
+			e.printStackTrace();
+		}
+	}
 
-            System.out.println("song : "+ songName);
-            System.out.println("album : "+ albumName);
-            System.out.println("artist : "+ artistName);
-            System.out.println("sample rate : "+ sampleRate);
-            System.out.println("sample size in bits : "+ sampleSizeInBits);
-            System.out.println("channels : "+ channels);
-            System.out.println("signed : "+ signed);
-            System.out.println("bigEndian : "+ bigEndian);
+	public static int byteArrayToLeInt(byte[] b) {
+		final ByteBuffer bb = ByteBuffer.wrap(b);
+		bb.order(ByteOrder.LITTLE_ENDIAN);
+		return bb.getInt();
+	}
 
-            //TODO : add genere and image
-            playerPropetrties = new PlayerPropetrtiesUDP(clientSocket, bis, format, bufferSize, fileSize, new SongStream(songName, albumName, artistName, category));
+	public static void main(String argv[]) throws Exception {
 
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return playerPropetrties;
-    }
-
-
-    public String[] getCategories() throws IOException
-    {
-        clientSocket = new DatagramSocket();
-        //Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
-
-        output = new DataOutputStream(clientSocket.getOutputStream());
-
-        //Ask for a new Song
-        try	{
-            output.writeBytes(ClientConfig.CsendMeCategoriesString + ClientConfig.messageDivider + System.lineSeparator());
-        } catch (IOException e)	{
-            System.out.println(this.getClass() + " Can't ask for a song");
-            e.printStackTrace();
-        }
-
-        InputStream is = null;
-        FileOutputStream songFos = null;
-        FileOutputStream imageFos = null;
-        BufferedOutputStream songBos = null;
-        BufferedOutputStream imageBos = null;
-
-        ByteArrayOutputStream baos = null;
-
-        int bufferSize = 0;
-        try
-        {
-            is = clientSocket.getInputStream();
-            bufferSize = clientSocket.getReceiveBufferSize();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        baos = new ByteArrayOutputStream();
-        byte[] bytes = new byte[bufferSize];
-        int count = 0;
-        while((count = is.read(bytes)) > 0)
-        {
-            baos.write(bytes,0,count);
-        }
-
-        String categoriesList = new String(baos.toByteArray());
-
-        String[] categoriesArr = categoriesList.split(",");
-
-//		ArrayList<String> categories = new ArrayList<>();
-//		for(String s : categoriesArr)
-//			categories.add(s);
-//
-//		return categories;
-        return categoriesArr;
-
-    }
-
-
-
-    public static int byteArrayToLeInt(byte[] b)
-    {
-        final ByteBuffer bb = ByteBuffer.wrap(b);
-        bb.order(ByteOrder.LITTLE_ENDIAN);
-        return bb.getInt();
-    }
-
-
-    public static void main(String argv[]) throws Exception {
-        UDPStreamingClient streamingClient =
-                new UDPStreamingClient(new File(ClientConfig.ClientDir));
-    }
+		TCPStreamingClient streamingClient = new TCPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort,
+				new File("D:\\RadioTit-client"));
+	}
 
 }
