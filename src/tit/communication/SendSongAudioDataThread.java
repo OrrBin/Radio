@@ -17,6 +17,7 @@ public class SendSongAudioDataThread extends Thread {
 
 	private Socket clientSocket;
 	private File songFile;
+	private boolean isSending = true;
 	
 	public SendSongAudioDataThread(Socket clientSocket, File songFile) {
 		this.songFile = songFile;
@@ -31,7 +32,11 @@ public class SendSongAudioDataThread extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public void close() {
+		isSending=false;
+	}
+
 	public void sendSongAudioData(File songFile) throws IOException, UnsupportedAudioFileException {
 		DatagramSocket socket = null;
 		AudioInputStream audioIS = null;
@@ -40,7 +45,7 @@ public class SendSongAudioDataThread extends Thread {
 			audioIS = AudioUtil.getFAudioInputStream(songFile);
 			int count;
 			byte[] songBytes = new byte[ServerConfig.DATAGRAM_PACKET_SIZE];
-			while ((count = audioIS.read(songBytes)) > 0) {
+			while (isSending == true && (count = audioIS.read(songBytes)) > 0) {
 				DatagramPacket packet = new DatagramPacket(songBytes, count, clientSocket.getInetAddress(), ClientConfig.UdpPort);
 				socket.send(packet);	
 				Thread.sleep(15);
@@ -48,12 +53,13 @@ public class SendSongAudioDataThread extends Thread {
 			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		} 
-//		finally {
-//			if (socket != null)
-//				socket.close();
-//			if (audioIS != null)
-//				audioIS.close();
-//		}
+		}
+
+		finally {
+			if (socket != null)
+				socket.close();
+			if (audioIS != null)
+				audioIS.close();
+		}
 	}
 }

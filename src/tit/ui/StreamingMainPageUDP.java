@@ -3,6 +3,8 @@ package tit.ui;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
@@ -44,10 +46,7 @@ public class StreamingMainPageUDP extends JFrame
 	private StreamingSongPanel songPanel;
 	private ControlPanel controlPanel;
 
-
 	private String[] categories;
-
-
 
 	public StreamingMainPageUDP() throws UnknownHostException, CommunicationException, IOException, LineUnavailableException 
 	{
@@ -55,6 +54,18 @@ public class StreamingMainPageUDP extends JFrame
 //		tcpClient = new TCPClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
 		streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
 		executor = Executors.newFixedThreadPool(1);
+
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				super.windowClosing(e);
+				try {
+					streamingClient.disconnect();
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
 
 		System.out.println("initiated streaming client");
 
@@ -66,8 +77,7 @@ public class StreamingMainPageUDP extends JFrame
 		player.addLineListener(new TitLineListener());
 //		streamingClient.getAudioData();
 		
-		
-		
+
 		this.setResizable(false);
 		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongStream())  ;
 		controlPanel = new ControlPanel(categories);
@@ -118,6 +128,7 @@ public class StreamingMainPageUDP extends JFrame
 
 		System.out.println("finished constructing Main Page");
 	}
+
 
 	public static void main(String[] args) throws IOException, CommunicationException, LineUnavailableException 
 	{

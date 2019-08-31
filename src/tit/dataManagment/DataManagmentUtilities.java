@@ -43,7 +43,7 @@ public class DataManagmentUtilities
 		{
 			System.out.println("Can not create high scores file path, going to try default location. Path = " + path.toString());
 			//Try default location
-			path = (ClientConfig.DefaultClientFolderPath);
+			//path = (ClientConfig.DefaultClientFolderPath);
 			//Notify if path creation has been successful
 			System.out.println("High scors file path set to default location");
 		}

@@ -46,27 +46,25 @@ public class UDPStreamingClient {
 
 	public UDPStreamingClient(String server, int port, File baseDirectory)
 			throws UnknownHostException, IOException, CommunicationException {
-		this.musicDirectory = new File(baseDirectory.getPath() + ClientConfig.DefaultMusicFolder);
-		this.imagesDirectory = new File(baseDirectory.getPath() + ClientConfig.DefaultImagesFolder);
+		//this.musicDirectory = new File(baseDirectory.getPath() + ClientConfig.DefaultMusicFolder);
+		//this.imagesDirectory = new File(baseDirectory.getPath() + ClientConfig.DefaultImagesFolder);
+		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
+		output = new DataOutputStream(clientSocket.getOutputStream());
 	}
 
 	public PlayerPropetrties getSongDetailsAndData(String category) throws IOException {
-		PlayerPropetrties playerPropetrties = null;
 
+		PlayerPropetrties playerPropetrties = null;
 		InputStream is = null;
 		FileOutputStream songFos = null;
 		FileOutputStream imageFos = null;
 		BufferedOutputStream songBos = null;
 		BufferedOutputStream imageBos = null;
-
 		ByteArrayOutputStream baos = null;
 
 		SourceDataLine line;
 		AudioFormat format;
 
-		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
-
-		output = new DataOutputStream(clientSocket.getOutputStream());
 		// Ask for a new Song
 		try {
 			output.writeBytes(ClientConfig.CsendMeNewSongString + ClientConfig.messageDivider + category
@@ -84,9 +82,6 @@ public class UDPStreamingClient {
 		int sampleSizeInBits, channels = 0;
 		boolean signed, bigEndian;
 		try {
-			
-			System.out.println("doing shit");
-			
 			is = clientSocket.getInputStream();
 			bufferSize = clientSocket.getReceiveBufferSize();
 			byte[] bytes = new byte[bufferSize];
@@ -191,24 +186,26 @@ public class UDPStreamingClient {
 		return playerPropetrties;
 
 	}
-	
-	public void getAudioData(Socket clientSocket) throws IOException {
-
-//		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
-
-		output = new DataOutputStream(clientSocket.getOutputStream());
-		// Ask for a new Song
-		try {
-			output.writeBytes(ClientConfig.CsendMeAudioData + ClientConfig.messageDivider + System.lineSeparator());
-		} catch (IOException e) {
-			System.out.println(this.getClass() + " Can't ask for a song");
-			e.printStackTrace();
-		}
-	}
 
 	public static int byteArrayToLeInt(byte[] b) {
 		final ByteBuffer bb = ByteBuffer.wrap(b);
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		return bb.getInt();
+	}
+
+	public void disconnect() throws IOException
+	{
+		try {
+			output.writeBytes(ClientConfig.CsendByeString + ClientConfig.messageDivider + System.lineSeparator());
+		} catch (IOException e) {
+			System.out.println(this.getClass() + " Can't close");
+			e.printStackTrace();
+		}
+		finally {
+			if (output != null)
+				output.close();
+			if (clientSocket != null)
+				clientSocket.close();
+		}
 	}
 }
