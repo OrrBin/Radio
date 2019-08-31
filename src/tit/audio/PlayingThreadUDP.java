@@ -94,7 +94,7 @@ public class PlayingThreadUDP implements Runnable {
 		}
 		
 		
-		int numPacets = 0;
+//		int numPacets = 0;
 		byte[] initialBuf = new byte[ServerConfig.DATAGRAM_PACKET_SIZE*110];
 		int initialBufSize = 0;
 		boolean initialBufUsed = false;
@@ -104,12 +104,11 @@ public class PlayingThreadUDP implements Runnable {
 			try {
 				socket.receive(packet);
 				long start = System.currentTimeMillis();
-				numPacets++;
+//				numPacets++;
 				count = packet.getLength();
 				
-				Runnable runnable = new WriteToLineThread(numPacets, line, audioFormat, buf, count, transfer, waveForm, samples, normalBytes);
+				Runnable runnable = new WriteToLineThread(line, audioFormat, buf, count, transfer, waveForm, samples, normalBytes);
 				exec.execute(runnable);
-				System.out.println("duration : " + (System.currentTimeMillis() - start));
 
 //				samples = unpack(packet.getData(), transfer, samples, count, audioFormat);
 //				samples = window(samples, count / normalBytes, audioFormat);
@@ -149,9 +148,9 @@ public class PlayingThreadUDP implements Runnable {
 		} while (count == 4096);
 
 		
-		System.out.println(numPacets);
+//		System.out.println(numPacets);
 		
-		System.out.println("out of while");
+//		System.out.println("out of while");
 		try {
 			bis.close();
 			socket.close();

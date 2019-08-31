@@ -68,7 +68,7 @@ public class UDPStreamingClient {
 		this.imagesDirectory = new File(baseDirectory.getPath() + ClientConfig.DefaultImagesFolder);
 	}
 
-	public PlayerPropetrties getSongPlayer(String category) throws IOException {
+	public PlayerPropetrties getSongDetailsAndData(String category) throws IOException {
 		PlayerPropetrties playerPropetrties = null;
 
 		InputStream is = null;
@@ -102,6 +102,9 @@ public class UDPStreamingClient {
 		int sampleSizeInBits, channels = 0;
 		boolean signed, bigEndian;
 		try {
+			
+			System.out.println("doing shit");
+			
 			is = clientSocket.getInputStream();
 			bufferSize = clientSocket.getReceiveBufferSize();
 			byte[] bytes = new byte[bufferSize];
@@ -120,6 +123,8 @@ public class UDPStreamingClient {
 			headerBytes = new byte[headerSize];
 			sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
 
+			System.out.println("read first header");
+			
 			// Read song name header
 			count += bis.read(headerBytes, 0, headerSize);
 			songName = Util.byteArrayToString(headerBytes);
@@ -196,14 +201,18 @@ public class UDPStreamingClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("getting audio data");
+//		getAudioData(clientSocket);
+		new GetAudioDataThread(output).start();
 
 		return playerPropetrties;
 
 	}
 	
-	public void getAudioData() throws IOException {
+	public void getAudioData(Socket clientSocket) throws IOException {
 
-		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
+//		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
 
 		output = new DataOutputStream(clientSocket.getOutputStream());
 		// Ask for a new Song

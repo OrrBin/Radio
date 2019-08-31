@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class UDPStreamingServer extends Thread {
 
-	static HashMap<InetAddress, File> clients = new HashMap<>();
+	static HashMap<InetAddress, StreamingConnectionUDP> clients = new HashMap<>();
 	
 	public static void main (String args[]) throws ClassNotFoundException, SQLException   
 	{   
@@ -31,9 +31,9 @@ public class UDPStreamingServer extends Thread {
 			while(true) {   
 				Socket clientSocket = listenSocket.accept(); 
 				InetAddress address = listenSocket.getInetAddress();
-				clients.put(address, StreamingConnectionUDP.songFile);
+				clients.put(address, new StreamingConnectionUDP(clientSocket));
 				
-				new StreamingConnectionUDP(clientSocket);   
+				   
 			}   
 		}   
 		catch(IOException e) {  

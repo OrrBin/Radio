@@ -9,7 +9,6 @@ import tit.ui.WaveFormPanel;
 
 public class WriteToLineThread implements Runnable {
 
-	private int index;
 	private SourceDataLine line;
 	AudioFormat audioFormat;
 	private byte[] data;
@@ -19,10 +18,9 @@ public class WriteToLineThread implements Runnable {
 	private float[] samples;
 	private int normalBytes ;	
 	
-	public WriteToLineThread(int index, SourceDataLine line, AudioFormat audioFormat, byte[] data, int count, long[] transfer,
+	public WriteToLineThread(SourceDataLine line, AudioFormat audioFormat, byte[] data, int count, long[] transfer,
 			WaveFormPanel waveForm, float[] samples, int normalBytes) {
 		super();
-		this.index = index;
 		this.line = line;
 		this.audioFormat = audioFormat;
 		this.data = data;
@@ -35,16 +33,12 @@ public class WriteToLineThread implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("running thread wit index: " + index);
-		
 		samples = unpack(data, transfer, samples, count, audioFormat);
 		samples = window(samples, count / normalBytes, audioFormat);
 
 		waveForm.drawDisplay(samples, count / normalBytes, line.getFormat());
 		line.write(data, 0, count);
 		
-		System.out.println("finished thread with index: " + index);
-
 	}
 	
 	public float[] unpack(byte[] bytes, long[] transfer, float[] samples, int bvalid, AudioFormat fmt) {

@@ -61,21 +61,24 @@ public class StreamingMainPageUDP extends JFrame
 	public StreamingMainPageUDP() throws UnknownHostException, CommunicationException, IOException, LineUnavailableException 
 	{
 		dataManager = new DataManagmentUtilities();
-		tcpClient = new TCPClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
+//		tcpClient = new TCPClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
 		streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
 		executor = Executors.newFixedThreadPool(1);
 
 		System.out.println("initiated streaming client");
 
-		categories = tcpClient.getCategories();
+//		categories = tcpClient.getCategories();
 
-		PlayerPropetrties playerPropetrties = streamingClient.getSongPlayer("led zepplin");
+		PlayerPropetrties playerPropetrties = streamingClient.getSongDetailsAndData("led zepplin");
+		System.out.println("After all shit");
 		PlayingThreadUDP player = new PlayingThreadUDP(playerPropetrties, new TitLineListener());
 		player.addLineListener(new TitLineListener());
-		streamingClient.getAudioData();
+//		streamingClient.getAudioData();
+		
+		
 		
 		this.setResizable(false);
-		songPanel = new StreamingSongPanel(categories,player.getSongStream());
+		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongStream())  ;
 		controlPanel = new ControlPanel(categories);
 
 		JPanel pane = new JPanel();
@@ -144,8 +147,8 @@ public class StreamingMainPageUDP extends JFrame
 				{
 					double d = Math.ceil(Math.random() * 2);
 					if(d > 1)
-						properties = streamingClient.getSongPlayer("led zepplin");
-					else properties = streamingClient.getSongPlayer("asaf");
+						properties = streamingClient.getSongDetailsAndData("led zepplin");
+					else properties = streamingClient.getSongDetailsAndData("asaf");
 					player = new PlayingThread(properties, new TitLineListener());
 				}
 				catch (IOException | LineUnavailableException e) 
