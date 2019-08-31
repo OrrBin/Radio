@@ -7,7 +7,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,32 +15,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.naming.CommunicationException;
-import javax.security.auth.login.Configuration;
-import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.TargetDataLine;
-import javax.xml.transform.Source;
-
-import com.sun.media.jfxmedia.track.Track.Encoding;
 
 import tit.audio.PlayerPropetrties;
-import tit.audio.PlayingThread;
-import tit.audio.Song;
 import tit.audio.SongStream;
 import tit.configuration.ClientConfig;
-import tit.configuration.DataManagmenetConfig;
 import tit.configuration.ServerConfig;
-import tit.dataManagment.DataManagmentUtilities;
-import tit.ui.StreamingMainPage.TitLineListener;
 import utilities.Util;
 
 /**
@@ -229,11 +211,4 @@ public class UDPStreamingClient {
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		return bb.getInt();
 	}
-
-	public static void main(String argv[]) throws Exception {
-
-		TCPStreamingClient streamingClient = new TCPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort,
-				new File("D:\\RadioTit-client"));
-	}
-
 }

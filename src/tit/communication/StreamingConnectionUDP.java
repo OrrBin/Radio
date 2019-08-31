@@ -31,8 +31,8 @@ import tit.dbUtilities.DBUtil;
 import utilities.Util;
 
 class StreamingConnectionUDP extends Thread {
-	public final static File songFile = new File("D:\\projects\\Radio\\RadioTit-server\\music\\Your Anchor.mp3");
-	// public final static File songFile = new
+	//public final static File songFile = new File("D:\\projects\\Radio\\RadioTit-server\\music\\Your Anchor.mp3");
+	public final static File songFile = new File("RadioTit-server/music/Your Anchor.mp3");
 	// File("D:\\projects\\Radio\\RadioTit-server\\wav\\Good Times Bad Times.wav");
 
 	DataInputStream input;

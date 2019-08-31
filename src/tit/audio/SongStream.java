@@ -26,10 +26,10 @@ public class SongStream
 		this.setArtistName(artistName);
 		this.setGenere(genere);
 		if(genere.equals("asaf"))
-			this.setSongImage(new File("D:\\projects\\RadioTit-server\\images\\Different Pulses.jpg"));
+			this.setSongImage(new File("RadioTit-server/images/Baileys.jpg"));
 
 		else if(genere.equals("led zepplin"))
-			this.setSongImage(new File("D:\\projects\\\\RadioTit-server\\images\\Baileys.jpg"));
+			this.setSongImage(new File("RadioTit-server/images/Baileys.jpg"));
 	}
 
 	public String getSongName() {

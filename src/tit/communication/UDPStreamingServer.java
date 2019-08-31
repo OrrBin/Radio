@@ -22,8 +22,7 @@ public class UDPStreamingServer extends Thread {
 	public static void main (String args[]) throws ClassNotFoundException, SQLException   
 	{   
 		try
-		{   
-			
+		{
 			//Create new listening socket
 			ServerSocket listenSocket = new ServerSocket(ServerConfig.serverPort);   
 		
@@ -32,8 +31,6 @@ public class UDPStreamingServer extends Thread {
 				Socket clientSocket = listenSocket.accept(); 
 				InetAddress address = listenSocket.getInetAddress();
 				clients.put(address, new StreamingConnectionUDP(clientSocket));
-				
-				   
 			}   
 		}   
 		catch(IOException e) {  

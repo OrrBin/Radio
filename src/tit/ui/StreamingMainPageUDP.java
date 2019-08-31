@@ -1,19 +1,14 @@
 package tit.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.media.CachingControl;
 import javax.naming.CommunicationException;
-import javax.sound.sampled.Control;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
@@ -21,14 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import com.sun.media.ui.ProgressBar;
-
 import tit.audio.PlayerPropetrties;
-import tit.audio.PlayerPropetrtiesUDP;
 import tit.audio.PlayingThread;
 import tit.audio.PlayingThreadUDP;
-import tit.communication.TCPClient;
-import tit.communication.TCPStreamingClient;
 import tit.communication.UDPStreamingClient;
 import tit.configuration.ServerConfig;
 import tit.configuration.UIConfig;
@@ -45,7 +35,8 @@ public class StreamingMainPageUDP extends JFrame
 	TitLineListener titLineListener;
 
 	private UDPStreamingClient streamingClient;
-	private TCPClient tcpClient;
+	//private TCPClient tcpClient;
+
 	DataManagmentUtilities dataManager;
 
 	ExecutorService executor;
