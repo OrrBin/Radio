@@ -82,6 +82,7 @@ public class StreamingMainPageUDP extends JFrame
 		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongStream())  ;
 		controlPanel = new ControlPanel(categories);
 
+
 		JPanel pane = new JPanel();
 		
 		this.add(pane,BorderLayout.CENTER);
@@ -103,13 +104,14 @@ public class StreamingMainPageUDP extends JFrame
 		
 		
 		this.getContentPane().add(songPanel, gbc);
+		this.getContentPane().add(controlPanel, gbc);
 		
 		GridBagConstraints gbc1 = new GridBagConstraints();
 		gbc1.fill = GridBagConstraints.BOTH;
 		gbc1.gridx = 0;
 		gbc1.gridy = 4;
 		
-		this.getContentPane().add(player.waveForm, gbc1);
+//		this.getContentPane().add(player.waveForm, gbc1);
 		
 		
 //		this.add(songPanel,BorderLayout.CENTER);
@@ -123,6 +125,7 @@ public class StreamingMainPageUDP extends JFrame
 
 		MediaPanelColors mpc = songPanel.setSong(player.getSongStream());
 		player.waveForm.setColors(mpc);
+//		controlPanel.setPlayingThread(player, mpc);
 //		controlPanel.setPlayingThread(player, mpc);
 		executor.submit(player);
 
@@ -144,14 +147,14 @@ public class StreamingMainPageUDP extends JFrame
 			if (le.getLine().equals(controlPanel.getPlayingThread().getLine()) && le.getType().equals(LineEvent.Type.CLOSE))
 			{				
 				PlayerPropetrties properties;
-				PlayingThread player = null;
+				PlayingThreadUDP player = null;
 				try 
 				{
 					double d = Math.ceil(Math.random() * 2);
 					if(d > 1)
 						properties = streamingClient.getSongDetailsAndData("led zepplin");
 					else properties = streamingClient.getSongDetailsAndData("asaf");
-					player = new PlayingThread(properties, new TitLineListener());
+					player = new PlayingThreadUDP(properties, new TitLineListener());
 				}
 				catch (IOException | LineUnavailableException e) 
 				{

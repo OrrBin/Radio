@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import tit.audio.PlayingThread;
+import tit.audio.PlayingThreadUDP;
 import tit.objects.MediaPanelColors;
 import utilities.Util;
 
@@ -24,7 +25,7 @@ public class ControlPanel extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = -2742408715579486340L;
-	private PlayingThread playingThread;
+	private PlayingThreadUDP playingThread;
 	private JButton play;
 	private JButton pause;
 	private JButton skip;
@@ -38,17 +39,17 @@ public class ControlPanel extends JPanel
 		play.addActionListener(new PlayActionListener());
 		play.setVisible(false);
 		play.updateUI();
-		
 
 		pause = new JButton("pause");
 		pause.addActionListener(new PauseActionListener());
-		play.setVisible(true);
+		pause.setVisible(true);
 
 		skip = new JButton("skip");
 		skip.addActionListener(new SkipActionListener());
+		skip.setVisible(true);
 		
 		progress = new JSlider(0, 1000, 0);
-		progress.setEnabled(false);
+		progress.setEnabled(true);
 		timeLabel = new JLabel("0");
 		
 //		JPanel buttonsPanel = new JPanel();
@@ -77,14 +78,19 @@ public class ControlPanel extends JPanel
 	public void paint(Graphics arg0) 
 	{
 		super.paint(arg0);
-		
-		int audioPosition = (int) (playingThread.getLine().getMicrosecondPosition() / 1000);
+
+		// TODO: playingThread is null when first starting the player , audioPosition = 1 was just random
+		// When audioPosition = 1 the image appears and vanishes right away, when audioPosition is playingthread
+		//		its null and the skip-pause-progress doesnt appear at all - maybe the image covers them??
+		//int audioPosition = (int) (playingThread.getLine().getMicrosecondPosition() / 1000);
+		int audioPosition = 1;
+
 		progress.setValue(audioPosition);
 		timeLabel.setText(Util.convertSecondsToStringTime(audioPosition/1000));
 		repaint();
 	}
 	
-	public void setPlayingThread(PlayingThread thread, MediaPanelColors mpc)
+	public void setPlayingThread(PlayingThreadUDP thread, MediaPanelColors mpc)
 	{
 		//		if(this.playingThread != null)
 		//		{
@@ -158,17 +164,16 @@ public class ControlPanel extends JPanel
 
 	public class SkipActionListener implements ActionListener
 	{
-
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
 			System.out.println("stopping thread : " + playingThread);
 			playingThread.stop();
+			//TODO: adding the skip action - playing the next song
 		}
-
 	}
 
-	public PlayingThread getPlayingThread() {
+	public PlayingThreadUDP getPlayingThread() {
 		return playingThread;
 
 	}

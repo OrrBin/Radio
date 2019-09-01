@@ -36,7 +36,7 @@ public class WriteToLineThread implements Runnable {
 		samples = unpack(data, transfer, samples, count, audioFormat);
 		samples = window(samples, count / normalBytes, audioFormat);
 
-		waveForm.drawDisplay(samples, count / normalBytes, line.getFormat());
+//		waveForm.drawDisplay(samples, count / normalBytes, line.getFormat());
 		line.write(data, 0, count);
 		
 	}
