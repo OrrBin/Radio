@@ -36,9 +36,11 @@ public class WriteToLineThread implements Runnable {
 		samples = unpack(data, transfer, samples, count, audioFormat);
 		samples = window(samples, count / normalBytes, audioFormat);
 
-//		waveForm.drawDisplay(samples, count / normalBytes, line.getFormat());
+		while(line.available() < count) {
+		// Just for making line.write be blocking
+		}
 		line.write(data, 0, count);
-		
+
 	}
 	
 	public float[] unpack(byte[] bytes, long[] transfer, float[] samples, int bvalid, AudioFormat fmt) {

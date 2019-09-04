@@ -79,14 +79,8 @@ public class ControlPanel extends JPanel
 	{
 		super.paint(arg0);
 
-		// TODO: playingThread is null when first starting the player , audioPosition = 1 was just random
-		// When audioPosition = 1 the image appears and vanishes right away, when audioPosition is playingthread
-		//		its null and the skip-pause-progress doesnt appear at all - maybe the image covers them??
-
 		if(playingThread != null) {
 			int audioPosition = (int) (playingThread.getLine().getMicrosecondPosition() / 1000);
-			//int audioPosition = 1;
-
 			progress.setValue(audioPosition);
 			timeLabel.setText(Util.convertSecondsToStringTime(audioPosition / 1000));
 		}

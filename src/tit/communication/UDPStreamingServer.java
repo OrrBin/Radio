@@ -20,7 +20,7 @@ public class UDPStreamingServer extends Thread {
 	static HashMap<InetAddress, StreamingConnectionUDP> clients = new HashMap<>();
 	
 	public static void main (String args[]) throws ClassNotFoundException, SQLException   
-	{   
+	{
 		try
 		{
 			//Create new listening socket

@@ -93,8 +93,7 @@ public class PlayingThreadUDP implements Runnable {
 			e1.printStackTrace();
 		}
 		
-		
-//		int numPacets = 0;
+		// Each time a packet is read (by recieve) its added to a list of packets that needed to be written to line by order
 		byte[] initialBuf = new byte[ServerConfig.DATAGRAM_PACKET_SIZE*110];
 		int initialBufSize = 0;
 		boolean initialBufUsed = false;
@@ -103,13 +102,13 @@ public class PlayingThreadUDP implements Runnable {
 			DatagramPacket packet = new DatagramPacket(buf, ServerConfig.DATAGRAM_PACKET_SIZE);
 			try {
 				socket.receive(packet);
-				long start = System.currentTimeMillis();
-//				numPacets++;
 				count = packet.getLength();
 				
-				Runnable runnable = new WriteToLineThread(line, audioFormat, buf, count, transfer, waveForm, samples, normalBytes);
+				Runnable runnable = new WriteToLineThread(line, audioFormat, buf, count, transfer, waveForm,
+                        samples, normalBytes);
 				exec.execute(runnable);
 
+				// TODO delete
 //				samples = unpack(packet.getData(), transfer, samples, count, audioFormat);
 //				samples = window(samples, count / normalBytes, audioFormat);
 //
@@ -177,9 +176,8 @@ public class PlayingThreadUDP implements Runnable {
 	public void pause() throws InterruptedException {
 		if (isPlaying && !isTerminated) {
 			isPlaying = false;
-			//line.wait();
-			line.getControls();
 			line.stop();
+			// TODO : most important thing now - can we make the line stop playing? or the buffer stop writing to line?!!
 		} else
 			System.out.println(getClass() + " trying to pause but song already paused or stopped.\n" + "isPlaying = "
 					+ isPlaying + "\n" + "isTerminated = " + isTerminated);
