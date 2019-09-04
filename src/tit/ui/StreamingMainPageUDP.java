@@ -82,7 +82,6 @@ public class StreamingMainPageUDP extends JFrame
 		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongStream())  ;
 		controlPanel = new ControlPanel(categories);
 
-
 		JPanel pane = new JPanel();
 		
 		this.add(pane,BorderLayout.CENTER);
@@ -125,8 +124,7 @@ public class StreamingMainPageUDP extends JFrame
 
 		MediaPanelColors mpc = songPanel.setSong(player.getSongStream());
 		player.waveForm.setColors(mpc);
-//		controlPanel.setPlayingThread(player, mpc);
-//		controlPanel.setPlayingThread(player, mpc);
+		controlPanel.setPlayingThread(player, mpc);
 		executor.submit(player);
 
 		System.out.println("finished constructing Main Page");

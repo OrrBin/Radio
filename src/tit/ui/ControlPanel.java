@@ -48,7 +48,7 @@ public class ControlPanel extends JPanel
 		skip.addActionListener(new SkipActionListener());
 		skip.setVisible(true);
 		
-		progress = new JSlider(0, 1000, 0);
+		progress = new JSlider(); // (0, 1000, 0);
 		progress.setEnabled(true);
 		timeLabel = new JLabel("0");
 		
@@ -82,11 +82,14 @@ public class ControlPanel extends JPanel
 		// TODO: playingThread is null when first starting the player , audioPosition = 1 was just random
 		// When audioPosition = 1 the image appears and vanishes right away, when audioPosition is playingthread
 		//		its null and the skip-pause-progress doesnt appear at all - maybe the image covers them??
-		//int audioPosition = (int) (playingThread.getLine().getMicrosecondPosition() / 1000);
-		int audioPosition = 1;
 
-		progress.setValue(audioPosition);
-		timeLabel.setText(Util.convertSecondsToStringTime(audioPosition/1000));
+		if(playingThread != null) {
+			int audioPosition = (int) (playingThread.getLine().getMicrosecondPosition() / 1000);
+			//int audioPosition = 1;
+
+			progress.setValue(audioPosition);
+			timeLabel.setText(Util.convertSecondsToStringTime(audioPosition / 1000));
+		}
 		repaint();
 	}
 	
@@ -138,7 +141,6 @@ public class ControlPanel extends JPanel
 
 	public class PlayActionListener implements ActionListener
 	{
-
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
@@ -146,20 +148,21 @@ public class ControlPanel extends JPanel
 			play.setVisible(false);
 			pause.setVisible(true);
 		}
-
 	}
 
 	public class PauseActionListener implements ActionListener
 	{
-
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
-			playingThread.pause();
-			pause.setVisible(false);
-			play.setVisible(true);
+			try {
+				playingThread.pause();
+				pause.setVisible(false);
+				play.setVisible(true);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-
 	}
 
 	public class SkipActionListener implements ActionListener

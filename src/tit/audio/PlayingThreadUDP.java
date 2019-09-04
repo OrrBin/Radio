@@ -174,9 +174,11 @@ public class PlayingThreadUDP implements Runnable {
 					+ "\n" + "isTerminated = " + isTerminated);
 	}
 
-	public void pause() {
+	public void pause() throws InterruptedException {
 		if (isPlaying && !isTerminated) {
 			isPlaying = false;
+			//line.wait();
+			line.getControls();
 			line.stop();
 		} else
 			System.out.println(getClass() + " trying to pause but song already paused or stopped.\n" + "isPlaying = "
