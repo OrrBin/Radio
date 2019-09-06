@@ -21,7 +21,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.SourceDataLine;
 
 import tit.audio.PlayerPropetrties;
-import tit.audio.SongStream;
+import tit.audio.SongDescriptors;
 import tit.configuration.ClientConfig;
 import tit.configuration.ServerConfig;
 import utilities.Util;
@@ -174,7 +174,7 @@ public class UDPStreamingClient {
 
 			// TODO : add genere and image
 			playerPropetrties = new PlayerPropetrties(clientSocket, bis, format, bufferSize, fileSize,
-					new SongStream(songName, albumName, artistName, category));
+					new SongDescriptors(songName, albumName, artistName, category));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

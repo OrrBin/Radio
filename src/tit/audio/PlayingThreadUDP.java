@@ -2,12 +2,9 @@ package tit.audio;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.Socket;
 import java.net.SocketException;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,7 +18,7 @@ import tit.ui.WaveFormPanel;
 public class PlayingThreadUDP implements Runnable {
 	DatagramSocket socket;
 	
-	private SongStream songStream;
+	private SongDescriptors songDescriptors;
 	private BufferedInputStream bis;
 	private long fileSize;
 	private SourceDataLine line;
@@ -40,7 +37,7 @@ public class PlayingThreadUDP implements Runnable {
 	
 	public PlayingThreadUDP(PlayerPropetrties p, LineListener l) throws LineUnavailableException, SocketException {
 		socket = new DatagramSocket(ClientConfig.UdpPort);
-		this.songStream = p.getSongStream();
+		this.songDescriptors = p.getSongDescriptors();
 		this.bis = p.getBis();
 		this.bytes = new byte[p.getBufferSize()];
 		this.setFileSize(p.getFileSize());
@@ -192,12 +189,12 @@ public class PlayingThreadUDP implements Runnable {
 					+ isPlaying + "\n" + "isTerminated = " + isTerminated);
 	}
 
-	public SongStream getSongStream() {
-		return songStream;
+	public SongDescriptors getSongDescriptors() {
+		return songDescriptors;
 	}
 
-	public void setSongStream(SongStream songStream) {
-		this.songStream = songStream;
+	public void setSongDescriptors(SongDescriptors songDescriptors) {
+		this.songDescriptors = songDescriptors;
 	}
 
 	public boolean isTerminated() {

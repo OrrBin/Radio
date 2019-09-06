@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
-
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
-
 import javafx.scene.shape.Path;
 import tit.audio.Song;
 import tit.configuration.DataManagmenetConfig;
@@ -20,27 +18,19 @@ public class MP3DataIngest
 {
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException
 	{
+//		File songsDirectory = new File(args[0]);
+//		File imagesDirectory = new File(args[1]);
+//		if(!songsDirectory.isDirectory())
+//		{
+//			System.out.println("Inupt songs directory :" + songsDirectory.getPath() + " Is Not A Directory!   Aborted...");
+//			return;
+//		}
 
-		DBUtil dbUtil = new DBUtil();
-
-		if(args.length < 2 || args.length > 2)
-		{
-			System.out.println("Usage : java dataDir");
-			return;
-		}
-		File songsDirectory = new File(args[0]);
-		File imagesDirectory = new File(args[1]);
-		if(!songsDirectory.isDirectory())
-		{
-			System.out.println("Inupt songs directory :" + songsDirectory.getPath() + " Is Not A Directory!   Aborted...");
-			return;
-		}
-
-		if(!imagesDirectory.isDirectory())
-		{
-			System.out.println("Inupt images directory :" + imagesDirectory.getPath() + " Is Not A Directory!   Aborted...");
-			return;
-		}
+//		if(!imagesDirectory.isDirectory())
+//		{
+//			System.out.println("Inupt images directory :" + imagesDirectory.getPath() + " Is Not A Directory!   Aborted...");
+//			return;
+//		}
 
 		File[] songsToIngest = songsDirectory.listFiles(new MP3Filter());
 
@@ -63,7 +53,6 @@ public class MP3DataIngest
 				e.printStackTrace();
 			}
 
-
 			if(MP3Song.hasId3v2Tag())
 			{
 				int dotPos = songFileName.lastIndexOf(".");
@@ -75,20 +64,12 @@ public class MP3DataIngest
 					nameWithoutExt = songFileName.substring(0,dotPos); 
 				
 				String[] parts = nameWithoutExt.split("-");
-				
-//				artist = parts[0].trim();
-//				title = parts[1].trim();
-//				album = "-Single-";
-				
+
 				ID3v2 propertiesReader =MP3Song.getId3v2Tag();
 				genre = propertiesReader.getGenreDescription();
 				title = propertiesReader.getTitle();
 				artist = propertiesReader.getArtist();
 				album = propertiesReader.getAlbum();
-				
-//				propertiesReader.setTitle(title);
-//				propertiesReader.setAlbum(album);
-//				propertiesReader.setArtist(artist);
 				
 				File tmpFile = new File(songFile.getParent() + "\\tmp.mp3");
 				try {
@@ -98,9 +79,6 @@ public class MP3DataIngest
 					e1.printStackTrace();
 				}
 
-
-				
-				
 				boolean imageFound = false;
 
 //				ID3v2 propertiesReader =MP3Song.getId3v2Tag();
@@ -229,19 +207,7 @@ public class MP3DataIngest
 
 					song = DataManagmentUtilities.createSong(newSongFile,newImageFile);
 					boolean isSuccess = true;
-					try
-					{
-						dbUtil.insertSongData(song);
-					}
-					catch(Exception e)
-					{
 
-						e.printStackTrace();
-						//Could not insert data t db
-						newSongFile.delete();
-						newImageFile.delete();
-						isSuccess = false;
-					}
 
 					if(isSuccess)
 					{

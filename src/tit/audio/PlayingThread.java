@@ -2,19 +2,17 @@ package tit.audio;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 
 import javax.sound.sampled.*;
 
-import tit.configuration.ClientConfig;
 import tit.configuration.UIConfig;
 import tit.ui.WaveFormPanel;
 
 public class PlayingThread implements Runnable 
 {
 	private Socket socket;
-	private SongStream songStream;
+	private SongDescriptors songDescriptors;
 	private BufferedInputStream bis;
 	private long fileSize;
 	private SourceDataLine line;
@@ -32,7 +30,7 @@ public class PlayingThread implements Runnable
 	public PlayingThread(PlayerPropetrties p, LineListener l) throws LineUnavailableException
 	{
 		socket = p.getSocket();
-		this.songStream = p.getSongStream();
+		this.songDescriptors = p.getSongDescriptors();
 		this.bis = p.getBis();
 		this.bytes = new byte[p.getBufferSize()];
 		this.setFileSize(p.getFileSize());
@@ -51,10 +49,11 @@ public class PlayingThread implements Runnable
 		waveForm = new WaveFormPanel(UIConfig.frameWidth, 128);
 	}
 
-	public PlayingThread(LineListener lineListener, Socket clientSocket, BufferedInputStream bis, AudioFormat format, int bufferSize, SongStream songStream) throws LineUnavailableException 
+	public PlayingThread(LineListener lineListener, Socket clientSocket, BufferedInputStream bis,
+						 AudioFormat format, int bufferSize, SongDescriptors songDescriptors) throws LineUnavailableException
 	{
 		socket = clientSocket;
-		this.songStream = songStream;
+		this.songDescriptors = songDescriptors;
 		//		this.is = is;
 		//		this.bis = new BufferedInputStream(is);
 		this.bis = bis;
@@ -223,12 +222,12 @@ public class PlayingThread implements Runnable
 				+ "isTerminated = " + isTerminated);
 	}
 
-	public SongStream getSongStream() {
-		return songStream;
+	public SongDescriptors getSongDescriptors() {
+		return songDescriptors;
 	}
 
-	public void setSongStream(SongStream songStream) {
-		this.songStream = songStream;
+	public void setSongDescriptors(SongDescriptors songDescriptors) {
+		this.songDescriptors = songDescriptors;
 	}
 
 	public boolean isTerminated() {

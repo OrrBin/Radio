@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import tit.audio.PlayerPropetrties;
-import tit.audio.PlayingThread;
 import tit.audio.PlayingThreadUDP;
 import tit.communication.UDPStreamingClient;
 import tit.configuration.ServerConfig;
@@ -52,7 +51,8 @@ public class StreamingMainPageUDP extends JFrame
 	{
 		dataManager = new DataManagmentUtilities();
 //		tcpClient = new TCPClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
-		streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
+		streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort,
+				dataManager.getClientBaseFolder());
 		executor = Executors.newFixedThreadPool(1);
 
 		this.addWindowListener(new WindowAdapter() {
@@ -79,7 +79,7 @@ public class StreamingMainPageUDP extends JFrame
 		
 
 		this.setResizable(false);
-		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongStream())  ;
+		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongDescriptors())  ;
 		controlPanel = new ControlPanel(categories);
 
 		JPanel pane = new JPanel();
@@ -122,7 +122,7 @@ public class StreamingMainPageUDP extends JFrame
 		this.setVisible(true);
 
 
-		MediaPanelColors mpc = songPanel.setSong(player.getSongStream());
+		MediaPanelColors mpc = songPanel.setSong(player.getSongDescriptors());
 		player.waveForm.setColors(mpc);
 		controlPanel.setPlayingThread(player, mpc);
 		executor.submit(player);
@@ -159,7 +159,7 @@ public class StreamingMainPageUDP extends JFrame
 					e.printStackTrace();
 				}
 
-				MediaPanelColors mpc = songPanel.setSong(player.getSongStream());
+				MediaPanelColors mpc = songPanel.setSong(player.getSongDescriptors());
 
 				try 
 				{
@@ -170,14 +170,7 @@ public class StreamingMainPageUDP extends JFrame
 					e.printStackTrace();
 				}
 				executor.execute(player);
-
-
 			}
 		}
-
 	}
-
-
-
-
 }

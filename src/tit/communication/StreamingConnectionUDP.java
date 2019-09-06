@@ -17,9 +17,16 @@ import tit.configuration.ClientConfig;
 import tit.configuration.ServerConfig;
 
 class StreamingConnectionUDP extends Thread {
-    //public final static File songFile = new File("D:\\projects\\Radio\\RadioTit-server\\music\\Your Anchor.mp3");
+
+    //TODO : why must be static ??
+    public static File dirRandom(File dirPath)
+    {
+        File[] files = dirPath.listFiles();
+        return files[(int)(files.length * Math.random())];
+    }
+
+    //public final static File songFile = dirRandom(new File("RadioTit-server/music/"));
     public final static File songFile = new File("RadioTit-server/music/Your Anchor.mp3");
-    // File("D:\\projects\\Radio\\RadioTit-server\\wav\\Good Times Bad Times.wav");
 
     DataInputStream input;
     BufferedReader bfr;

@@ -2,7 +2,7 @@ package tit.audio;
 
 import java.io.File;
 
-public class SongStream 
+public class SongDescriptors
 {
 	private String songName;
 	private String albumName;
@@ -10,7 +10,7 @@ public class SongStream
 	private String genere;
 	private File songImage;
 	
-	public SongStream(String songName, String albumName, String artistName, String genere, File imageFile) 
+	public SongDescriptors(String songName, String albumName, String artistName, String genere, File imageFile)
 	{
 		this.setSongName(songName);
 		this.setAlbumName(albumName);
@@ -19,17 +19,13 @@ public class SongStream
 		this.setSongImage(imageFile);
 	}
 	
-	public SongStream(String songName, String albumName, String artistName, String genere) 
+	public SongDescriptors(String songName, String albumName, String artistName, String genere)
 	{
 		this.setSongName(songName);
 		this.setAlbumName(albumName);
 		this.setArtistName(artistName);
 		this.setGenere(genere);
-		if(genere.equals("asaf"))
-			this.setSongImage(new File("RadioTit-server/images/Baileys.jpg"));
-
-		else if(genere.equals("led zepplin"))
-			this.setSongImage(new File("RadioTit-server/images/Baileys.jpg"));
+		this.setSongImage(new File("RadioTit-server/images/"+songName));
 	}
 
 	public String getSongName() {
@@ -72,5 +68,11 @@ public class SongStream
 
 	public void setSongImage(File imageFile) {
 		this.songImage = imageFile;
+	}
+
+	public File dirRandom(File dirPath)
+	{
+		File[] files = dirPath.listFiles();
+		return files[(int)(files.length * Math.random())];
 	}
 }

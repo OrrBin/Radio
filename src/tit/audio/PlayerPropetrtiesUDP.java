@@ -3,7 +3,6 @@ package tit.audio;
 import javax.sound.sampled.AudioFormat;
 import java.io.BufferedInputStream;
 import java.net.DatagramSocket;
-import java.net.Socket;
 
 public class PlayerPropetrtiesUDP
 {
@@ -12,15 +11,15 @@ public class PlayerPropetrtiesUDP
 	private AudioFormat format;
 	private int bufferSize;
 	private long fileSize;
-	private SongStream songStream;
+	private SongDescriptors songDescriptors;
 	
-	public PlayerPropetrtiesUDP(DatagramSocket socket, BufferedInputStream bis, AudioFormat format, int bufferSize, long fileSize, SongStream songStream)
+	public PlayerPropetrtiesUDP(DatagramSocket socket, BufferedInputStream bis, AudioFormat format, int bufferSize, long fileSize, SongDescriptors songDescriptors)
 	{
 		this.socket = socket;
 		this.bis = bis;
 		this.format = format;
 		this.bufferSize = bufferSize;
-		this.songStream = songStream;
+		this.songDescriptors = songDescriptors;
 		this.setFileSize(fileSize);
 	}
 
@@ -56,12 +55,12 @@ public class PlayerPropetrtiesUDP
 		this.bufferSize = bufferSize;
 	}
 
-	public SongStream getSongStream() {
-		return songStream;
+	public SongDescriptors getSongDescriptors() {
+		return songDescriptors;
 	}
 
-	public void setSongStream(SongStream songStream) {
-		this.songStream = songStream;
+	public void setSongDescriptors(SongDescriptors songDescriptors) {
+		this.songDescriptors = songDescriptors;
 	}
 
 	public long getFileSize() {

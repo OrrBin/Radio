@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -18,8 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import tit.audio.Song;
-import tit.audio.SongStream;
+import tit.audio.SongDescriptors;
 import tit.configuration.UIConfig;
 import tit.imageProcessing.FontProcessor;
 import tit.imageProcessing.ImageProcessor;
@@ -33,7 +31,7 @@ import tit.objects.SongPanelColors;
  */
 public class StreamingSongPanel extends JPanel 
 {
-	private SongStream song;
+	private SongDescriptors song;
 	private SongPanelColors songPanelColors;
 	private JLabel songNameLabel;
 	private JLabel albumNameLabel;
@@ -46,7 +44,7 @@ public class StreamingSongPanel extends JPanel
 	JComboBox<String> categoriesBox;
 	GridBagConstraints gc;
 
-	public StreamingSongPanel(String[] categories, SongStream song)
+	public StreamingSongPanel(String[] categories, SongDescriptors song)
 	{
 		super();
 		
@@ -154,7 +152,7 @@ public class StreamingSongPanel extends JPanel
 		//		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{songNameLabel, albumNameLabel, artistNameLabel}));
 	}
 
-	public SongStream getSong() {
+	public SongDescriptors getSong() {
 		return song;
 	}
 	
@@ -167,7 +165,7 @@ public class StreamingSongPanel extends JPanel
 	}
 
 
-	public MediaPanelColors setSong(SongStream song) 
+	public MediaPanelColors setSong(SongDescriptors song)
 	{
 		this.song = song;
 		//Update UI to the new song
