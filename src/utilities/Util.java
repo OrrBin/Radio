@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import tit.configuration.ClientConfig;
 import tit.configuration.ServerConfig;
 
 public class Util
@@ -172,5 +173,9 @@ public class Util
 
 		return sb.toString();
 
+	}
+	
+	public static String clientMessage(String... parts) {
+		return String.join(ClientConfig.messageDivider, parts).concat("\n");
 	}
 }

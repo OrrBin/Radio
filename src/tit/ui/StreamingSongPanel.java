@@ -1,6 +1,7 @@
 package tit.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -31,8 +32,20 @@ import tit.objects.SongPanelColors;
  */
 public class StreamingSongPanel extends JPanel 
 {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6716699269429005928L;
+	
+	private static Color textColor = new Color(0,0,0);
+	private static Color backgroundColor = new Color(255,255,255);
+	
+	private static SongPanelColors spc = new SongPanelColors(textColor, textColor, textColor, backgroundColor);
+	private static MediaPanelColors mpc = new MediaPanelColors(backgroundColor, textColor, textColor);
+	
 	private SongDescriptors song;
-	private SongPanelColors songPanelColors;
+	private SongPanelColors songPanelColors = spc;
 	private JLabel songNameLabel;
 	private JLabel albumNameLabel;
 	private JLabel artistNameLabel;
@@ -169,7 +182,7 @@ public class StreamingSongPanel extends JPanel
 	{
 		this.song = song;
 		//Update UI to the new song
-		MediaPanelColors mpc = updateSongData();
+//		MediaPanelColors mpc = updateSongData();
 
 		return mpc;
 	}
@@ -187,21 +200,24 @@ public class StreamingSongPanel extends JPanel
 	 */
 	private MediaPanelColors updateSongData()
 	{
-		SongPanelColors spc = null;
-		MediaPanelColors mpc = null;
-		try {
-			spc = ImageProcessor.getSongPanelColors(song.getSongImage());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		SongPanelColors spc = null;
+//		MediaPanelColors mpc = null;
+//		
+		
+//		try {
+//			spc = ImageProcessor.getSongPanelColors(song.getSongImage());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
-		try {
-			mpc = ImageProcessor.getMediaPanelColors(song.getSongImage());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
+			
+//		try {
+//			mpc = ImageProcessor.getMediaPanelColors(song.getSongImage());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 //		songNameLabel.setText(song.getSongName());
 //		songNameLabel.setForeground(spc.getSongColor());

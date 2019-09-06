@@ -67,8 +67,7 @@ public class UDPStreamingClient {
 
 		// Ask for a new Song
 		try {
-			output.writeBytes(ClientConfig.CsendMeNewSongString + ClientConfig.messageDivider + category
-					+ System.lineSeparator());
+			output.writeBytes(Util.clientMessage(ClientConfig.CsendMeNewSongString, category));
 		} catch (IOException e) {
 			System.out.println(this.getClass() + " Can't ask for a song");
 			e.printStackTrace();

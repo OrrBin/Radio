@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import tit.configuration.ClientConfig;
+import utilities.Util;
 
 public class GetAudioDataThread extends Thread {
 
@@ -25,13 +26,9 @@ public class GetAudioDataThread extends Thread {
 	}
 
 	public void getAudioData() throws IOException {
-
-		// clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
-
-//		output = new DataOutputStream(clientSocket.getOutputStream());
 		// Ask for a new Song
 		try {
-			output.writeBytes(ClientConfig.CsendMeAudioData + ClientConfig.messageDivider + System.lineSeparator());
+			output.writeBytes(Util.clientMessage(ClientConfig.CsendMeAudioData ));
 		} catch (IOException e) {
 			System.out.println(this.getClass() + " Can't ask for a song");
 			e.printStackTrace();
