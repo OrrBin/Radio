@@ -33,13 +33,16 @@ public class WriteToLineThread implements Runnable {
 
 	@Override
 	public void run() {
-		samples = unpack(data, transfer, samples, count, audioFormat);
-		samples = window(samples, count / normalBytes, audioFormat);
-
+		
 		while(line.available() < count) {
 		// Just for making line.write be blocking
 		}
 		line.write(data, 0, count);
+
+		samples = unpack(data, transfer, samples, count, audioFormat);
+		samples = window(samples, count / normalBytes, audioFormat);
+
+		waveForm.drawDisplay(samples, count / normalBytes, line.getFormat());
 
 	}
 	

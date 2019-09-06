@@ -88,29 +88,35 @@ public class StreamingMainPageUDP extends JFrame
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWeights = new double[]{1.0};
-		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0};
+		gridBagLayout.rowWeights = new double[]{5.0, 1.0, 1.0};
 		
 		this.getContentPane().setLayout(gridBagLayout);
 //		pane.setLayout();
 //		pane.setBackground(Color.red);
 		
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.gridheight = 4;
+		GridBagConstraints songPanelGbc = new GridBagConstraints();
+		songPanelGbc.fill = GridBagConstraints.BOTH;
+		songPanelGbc.gridx = 0;
+		songPanelGbc.gridy = 0;
+		
+		GridBagConstraints controlPanelGbc = new GridBagConstraints();
+		controlPanelGbc.fill = GridBagConstraints.BOTH;
+		controlPanelGbc.gridx = 0;
+		controlPanelGbc.gridy = 1;
 
+		GridBagConstraints waveFormGbc = new GridBagConstraints();
+		waveFormGbc.fill = GridBagConstraints.BOTH;
+		waveFormGbc.gridx = 0;
+		waveFormGbc.gridy = 2;
+		
+		this.getContentPane().add(player.waveForm, waveFormGbc);
 		
 		
-		this.getContentPane().add(songPanel, gbc);
-		this.getContentPane().add(controlPanel, gbc);
 		
-		GridBagConstraints gbc1 = new GridBagConstraints();
-		gbc1.fill = GridBagConstraints.BOTH;
-		gbc1.gridx = 0;
-		gbc1.gridy = 4;
+		this.getContentPane().add(songPanel, songPanelGbc);
+		this.getContentPane().add(controlPanel, controlPanelGbc);
 		
-//		this.getContentPane().add(player.waveForm, gbc1);
+		
 		
 		
 //		this.add(songPanel,BorderLayout.CENTER);

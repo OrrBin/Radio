@@ -195,7 +195,7 @@ public class UDPStreamingClient {
 	public void disconnect() throws IOException
 	{
 		try {
-			output.writeBytes(ClientConfig.CsendByeString + ClientConfig.messageDivider + System.lineSeparator());
+			output.writeBytes(Util.clientMessage(ClientConfig.CsendByeString));
 		} catch (IOException e) {
 			System.out.println(this.getClass() + " Can't close");
 			e.printStackTrace();
