@@ -36,7 +36,7 @@ public class StreamingMainPageUDP extends JFrame
 	TitLineListener titLineListener;
 	private UDPStreamingClient streamingClient;
 	DataManagmentUtilities dataManager;
-
+	PlayingThreadUDP player ;
 	ExecutorService executor;
 
 	private StreamingSongPanel songPanel;
@@ -70,7 +70,7 @@ public class StreamingMainPageUDP extends JFrame
 
 		PlayerPropetrties playerPropetrties = streamingClient.getSongDetailsAndData("led zepplin");
 		System.out.println("After all shit");
-		PlayingThreadUDP player = new PlayingThreadUDP(playerPropetrties, new TitLineListener());
+		player = new PlayingThreadUDP(playerPropetrties, new TitLineListener());
 		player.addLineListener(new TitLineListener());
 //		streamingClient.getAudioData();
 		
@@ -106,9 +106,7 @@ public class StreamingMainPageUDP extends JFrame
 		waveFormGbc.gridx = 0;
 		waveFormGbc.gridy = 2;
 		
-		
-		
-		
+
 		this.getContentPane().add(songPanel, songPanelGbc);
 		this.getContentPane().add(controlPanel, controlPanelGbc);
 		this.getContentPane().add(player.waveForm, waveFormGbc);
@@ -139,34 +137,41 @@ public class StreamingMainPageUDP extends JFrame
 		@Override
 		public void update(LineEvent le) 
 		{			
-			if (le.getLine().equals(controlPanel.getPlayingThread().getLine()) && le.getType().equals(LineEvent.Type.CLOSE))
-			{				
-				PlayerPropetrties properties;
-				PlayingThreadUDP player = null;
-				try 
-				{
-					double d = Math.ceil(Math.random() * 2);
-					if(d > 1)
-						properties = streamingClient.getSongDetailsAndData("led zepplin");
-					else properties = streamingClient.getSongDetailsAndData("asaf");
-					player = new PlayingThreadUDP(properties, new TitLineListener());
-				}
-				catch (IOException | LineUnavailableException e) 
-				{
+			if (le.getLine().equals(controlPanel.getPlayingThread().getLine()) && le.getType().equals(LineEvent.Type.CLOSE)) {
+				try {
+					streamingClient.disconnect();
+					System.out.println("streamingClient.disconnect();");
+
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
-				MediaPanelColors mpc = songPanel.setSong(player.getSongDescriptors());
-
-				try 
-				{
-					controlPanel.setPlayingThread(player, mpc);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-				executor.execute(player);
+//				PlayerPropetrties properties;
+//				PlayingThreadUDP player = null;
+//				try
+//				{
+//					double d = Math.ceil(Math.random() * 2);
+//					if(d > 1)
+//						properties = streamingClient.getSongDetailsAndData("led zepplin");
+//					else properties = streamingClient.getSongDetailsAndData("asaf");
+//					player = new PlayingThreadUDP(properties, new TitLineListener());
+//				}
+//				catch (IOException | LineUnavailableException e)
+//				{
+//					e.printStackTrace();
+//				}
+//
+//				MediaPanelColors mpc = songPanel.setSong(player.getSongDescriptors());
+//
+//				try
+//				{
+//					controlPanel.setPlayingThread(player, mpc);
+//				}
+//				catch (Exception e)
+//				{
+//					e.printStackTrace();
+//				}
+//				executor.execute(player);
+//			}
 			}
 		}
 	}

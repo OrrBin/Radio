@@ -7,9 +7,7 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import javax.sound.sampled.*;
-
 import tit.configuration.ClientConfig;
 import tit.configuration.ServerConfig;
 import tit.configuration.UIConfig;
@@ -68,8 +66,6 @@ public class PlayingThreadUDP implements Runnable {
 
 		float[] samples = new float[DEF_BUFFER_SAMPLE_SZ * audioFormat.getChannels()];
 		long[] transfer = new long[samples.length];
-//		byte[] bytes = new byte[samples.length * normalBytes];
-//		byte[] bytes = new byte[4096];
 
 		try {
 			line.open(format);
@@ -78,10 +74,6 @@ public class PlayingThreadUDP implements Runnable {
 		}
 
 		line.start();
-
-//		for (int feed = 0; feed < 6; feed++) {
-//			line.write(bytes, 0, bytes.length);
-//		}
 
 		try {
 			socket.setSoTimeout(1000);
@@ -105,35 +97,6 @@ public class PlayingThreadUDP implements Runnable {
                         samples, normalBytes);
 				exec.execute(runnable);
 
-				// TODO delete
-//				samples = unpack(packet.getData(), transfer, samples, count, audioFormat);
-//				samples = window(samples, count / normalBytes, audioFormat);
-//
-//				waveForm.drawDisplay(samples, count / normalBytes, line.getFormat());
-//				line.write(buf, 0, count);
-
-//				
-//				if(line.available() < count) {
-//					System.out.println();
-//					line.drain();
-//				}
-//				
-//				if(initialBufSize < ServerConfig.DATAGRAM_PACKET_SIZE*100) {
-//					System.out.println("initialBufSize < ServerConfig.DATAGRAM_PACKET_SIZE*300");
-//					for(int i = 0; i < count; i++) {
-//						initialBuf[initialBufSize + i] = buf[i];
-//					}
-//					initialBufSize += count;
-//				} else if(!initialBufUsed) {
-//					System.out.println("!initialBufUsed");
-//					line.write(initialBuf, 0, initialBufSize);
-//					initialBufUsed = true;
-//				} else {
-//					System.out.println("else");
-//					line.write(buf, 0, count);
-					
-//				}
-				
 				
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -141,12 +104,8 @@ public class PlayingThreadUDP implements Runnable {
 			}
 			
 			
-		} while (count == 4096);
+		} while (count >0 && !isTerminated);
 
-		
-//		System.out.println(numPacets);
-		
-//		System.out.println("out of while");
 		try {
 			bis.close();
 			socket.close();
@@ -174,7 +133,6 @@ public class PlayingThreadUDP implements Runnable {
 		if (isPlaying && !isTerminated) {
 			isPlaying = false;
 			line.stop();
-			// TODO : most important thing now - can we make the line stop playing? or the buffer stop writing to line?!!
 		} else
 			System.out.println(getClass() + " trying to pause but song already paused or stopped.\n" + "isPlaying = "
 					+ isPlaying + "\n" + "isTerminated = " + isTerminated);

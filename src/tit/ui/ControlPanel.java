@@ -166,6 +166,7 @@ public class ControlPanel extends JPanel
 		{
 			System.out.println("stopping thread : " + playingThread);
 			playingThread.stop();
+
 			//TODO: adding the skip action - playing the next song
 
 		}
