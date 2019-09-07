@@ -23,7 +23,7 @@ class StreamingConnectionUDP extends Thread {
 
 	// public final static File songFile = dirRandom(new
 	// File("RadioTit-server/music/"));
-	public final static File songFile = new File("RadioTit-server/music/Your Anchor.mp3");
+	public final static File songFile = new File("RadioTit-server/music/Alabama Song (Whisky Bar).mp3");
 
 	DataInputStream input;
 	BufferedReader bfr;

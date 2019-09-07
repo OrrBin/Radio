@@ -38,8 +38,8 @@ public class StreamingSongPanel extends JPanel
 	 */
 	private static final long serialVersionUID = -6716699269429005928L;
 	
-	private static Color textColor = new Color(0,0,0);
-	private static Color backgroundColor = new Color(255,255,255);
+	private static Color textColor = new Color(249,211,66);
+	private static Color backgroundColor = new Color(41, 40, 38);
 	
 	private static SongPanelColors spc = new SongPanelColors(textColor, textColor, textColor, backgroundColor);
 	private static MediaPanelColors mpc = new MediaPanelColors(backgroundColor, textColor, textColor);
@@ -112,10 +112,11 @@ public class StreamingSongPanel extends JPanel
 		super.paintComponent(g);
 
 		Rectangle panelSize = this.getBounds();
+		this.setBackground(songPanelColors.getBackgroundColor());
 
 		//Drawing the background image
-		g.drawImage(backgroundImage, 0, 0, (int)panelSize.getWidth(), (int)panelSize.getHeight(), null);
-
+//		g.drawImage(backgroundImage, 0, 0, (int)panelSize.getWidth(), (int)panelSize.getHeight(), null);
+		
 		// get metrics from the graphics
 		FontMetrics metrics = g.getFontMetrics(UIConfig.songNameFont);
 		// get the height of a line of text in this
@@ -150,11 +151,11 @@ public class StreamingSongPanel extends JPanel
 		FontProcessor.outLine(g, song.getAlbumName(), songPanelColors.getBackgroundColor(), songPanelColors.getAlbumColor(), albumX, albumY, UIConfig.albumNameFont);
 		//Draw artist name
 		FontProcessor.outLine(g, song.getArtistName(), songPanelColors.getBackgroundColor(), songPanelColors.getArtistColor(), artistX, artistY, UIConfig.artistNameFont);
-		
-		categoriesBox.setBackground(songPanelColors.getBackgroundColor());
-		categoriesBox.setForeground(songPanelColors.getSongColor());
 
-		this.add(categoriesBox, BorderLayout.SOUTH);
+//		categoriesBox.setBackground(songPanelColors.getBackgroundColor());
+//		categoriesBox.setForeground(songPanelColors.getSongColor());
+//
+//		this.add(categoriesBox, BorderLayout.SOUTH);
 		
 		//Add labels
 		//		this.setVisible(true);

@@ -109,20 +109,14 @@ public class StreamingMainPageUDP extends JFrame
 		waveFormGbc.gridx = 0;
 		waveFormGbc.gridy = 2;
 		
-		this.getContentPane().add(player.waveForm, waveFormGbc);
 		
 		
 		
 		this.getContentPane().add(songPanel, songPanelGbc);
 		this.getContentPane().add(controlPanel, controlPanelGbc);
-		
-		
-		
-		
-//		this.add(songPanel,BorderLayout.CENTER);
-//		player.waveForm.setSize(this.getWidth(), this.getHeight()/4);
-//		this.add(player.waveForm, BorderLayout.SOUTH);
-//		this.add(controlPanel,BorderLayout.SOUTH);
+		this.getContentPane().add(player.waveForm, waveFormGbc);
+
+	
 		this.setSize(UIConfig.frameSize);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setVisible(true);
