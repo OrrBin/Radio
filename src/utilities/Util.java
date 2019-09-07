@@ -1,5 +1,6 @@
 package utilities;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
@@ -28,7 +29,6 @@ public class Util
 	/**
 	 * returns byte array with {ServerConfig.NUMBER_HEADER_SIZE} cells,
 	 * that holds the float
-	 * @param i
 	 * @return
 	 */
 	public static byte[] FloatToByteArray(float f)
@@ -42,7 +42,6 @@ public class Util
 	/**
 	 * returns byte array with {ServerConfig.LONG_NUMBER_HEADER_SIZE} cells,
 	 * that holds the float
-	 * @param i
 	 * @return
 	 */
 	public static byte[] LongToByteArray(long l)
@@ -56,7 +55,6 @@ public class Util
 	/**
 	 * returns byte array with {ServerConfig.BOOLEAN_HEADER_SIZE} cells,
 	 * that holds the boolean
-	 * @param i
 	 * @return
 	 */
 	public static byte[] booleanToByteArray(boolean b)
@@ -80,7 +78,6 @@ public class Util
 	/**
 	 * returns byte array with{ServerConfig.NUMBER_HEADER_SIZE} cells,
 	 * that holds the String bytes array size
-	 * @param i
 	 * @return
 	 */
 	public static byte[] getStringSizeInBytes(String s)
@@ -95,7 +92,6 @@ public class Util
 	/**
 	 * returns byte array with dynamic number of cells,
 	 * that holds the String
-	 * @param i
 	 * @return
 	 */
 	public static byte[] StringToByteArray(String s)
@@ -177,5 +173,14 @@ public class Util
 	
 	public static String clientMessage(String... parts) {
 		return String.join(ClientConfig.messageDivider, parts).concat("\n");
+	}
+
+	public static File chooseRandomSong(String dirPath) {
+		File dir = new File(dirPath);
+		File[] files = dir.listFiles();
+		if (files.length != 0) {
+			return files[(int) ((files.length - 1) * Math.random())];
+		}
+		else return null;
 	}
 }

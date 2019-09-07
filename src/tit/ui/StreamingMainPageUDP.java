@@ -34,10 +34,7 @@ public class StreamingMainPageUDP extends JFrame
 	private static final long serialVersionUID = 1L;
 
 	TitLineListener titLineListener;
-
 	private UDPStreamingClient streamingClient;
-	//private TCPClient tcpClient;
-
 	DataManagmentUtilities dataManager;
 
 	ExecutorService executor;
