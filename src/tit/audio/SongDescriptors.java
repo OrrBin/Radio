@@ -70,9 +70,4 @@ public class SongDescriptors
 		this.songImage = imageFile;
 	}
 
-	public File dirRandom(File dirPath)
-	{
-		File[] files = dirPath.listFiles();
-		return files[(int)(files.length * Math.random())];
-	}
 }
