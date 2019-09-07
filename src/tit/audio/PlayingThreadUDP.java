@@ -105,7 +105,7 @@ public class PlayingThreadUDP implements Runnable {
 
 		} while (count >0 && !isTerminated);
 
-		
+		exec.shutdown();
 		while (!isTerminated) {
 			try {
 				boolean isFinished = exec.awaitTermination(100, TimeUnit.MILLISECONDS);
