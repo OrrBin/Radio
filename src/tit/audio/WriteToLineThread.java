@@ -1,7 +1,5 @@
 package tit.audio;
 
-import java.net.DatagramPacket;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.SourceDataLine;
 
@@ -17,7 +15,7 @@ public class WriteToLineThread implements Runnable {
 	private WaveFormPanel waveForm;
 	private float[] samples;
 	private int normalBytes ;	
-	
+
 	public WriteToLineThread(SourceDataLine line, AudioFormat audioFormat, byte[] data, int count, long[] transfer,
 			WaveFormPanel waveForm, float[] samples, int normalBytes) {
 		super();
@@ -33,9 +31,14 @@ public class WriteToLineThread implements Runnable {
 
 	@Override
 	public void run() {
-		
+		//		long startTime = System.currentTimeMillis();
+
 		while(line.available() < count) {
-		// Just for making line.write be blocking
+			// Just for making line.write be blocking
+			if(!line.isOpen()) {
+				System.out.println("line is not open , stop waiting");
+				return;
+			}
 		}
 		line.write(data, 0, count);
 
@@ -43,9 +46,8 @@ public class WriteToLineThread implements Runnable {
 		samples = window(samples, count / normalBytes, audioFormat);
 
 		waveForm.drawDisplay(samples, count / normalBytes, line.getFormat());
-
 	}
-	
+
 	public float[] unpack(byte[] bytes, long[] transfer, float[] samples, int bvalid, AudioFormat fmt) {
 		if (fmt.getEncoding() != AudioFormat.Encoding.PCM_SIGNED
 				&& fmt.getEncoding() != AudioFormat.Encoding.PCM_UNSIGNED) {

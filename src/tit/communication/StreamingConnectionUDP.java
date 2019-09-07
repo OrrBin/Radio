@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 
 import tit.configuration.ClientConfig;
+import tit.configuration.ServerConfig;
 import utilities.Util;
 
 class StreamingConnectionUDP extends Thread {
@@ -60,20 +61,16 @@ class StreamingConnectionUDP extends Thread {
             switch (clientMessage.split(ClientConfig.messageDivider)[0]) {
                 case ClientConfig.CsendMeNewSongString:
 
-                    songFile = Util.chooseRandomSong("RadioTit-server/music/");
+                    songFile = Util.chooseRandomSong(ServerConfig.baseFolder);
                     sendDetailsThread = new SendSongDetailsThreard(clientSocket, songFile);
                     sendDetailsThread.start();
 
                     break;
-                case ClientConfig.CsendMeCategoriesString:
-                    if (sendCategoriesThread == null) {
-                        sendCategoriesThread = new SendCategoriesThread(clientSocket);
-                        sendCategoriesThread.start();
-                    }
-                    break;
                 case ClientConfig.CsendMeAudioData:
                     System.out.println("sending song data!!!!");
-                    if (sendAudioThread != null) sendAudioThread.close();
+                    if (sendAudioThread != null) {
+                    	sendAudioThread.close();
+                    }
                     sendAudioThread = new SendSongAudioDataThread(clientSocket, songFile);
                     sendAudioThread.start();
                     break;
@@ -90,6 +87,13 @@ class StreamingConnectionUDP extends Thread {
 
         if (clientSocket != null) {
             try {
+            	System.out.println("closing streaming connection udp");
+            	if(bis != null)
+            		bis.close();
+            	if(bfr != null)
+            		bfr.close();
+            	if(output != null)
+            	output.close();
                 clientSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();

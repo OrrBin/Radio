@@ -7,6 +7,8 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import javax.sound.sampled.*;
 import tit.configuration.ClientConfig;
 import tit.configuration.ServerConfig;
@@ -15,7 +17,7 @@ import tit.ui.WaveFormPanel;
 
 public class PlayingThreadUDP implements Runnable {
 	DatagramSocket socket;
-	
+
 	private SongDescriptors songDescriptors;
 	private BufferedInputStream bis;
 	private long fileSize;
@@ -25,19 +27,16 @@ public class PlayingThreadUDP implements Runnable {
 	private boolean isTerminated;
 	private boolean isDone;
 
-	private AudioInputStream din;
-
 	public WaveFormPanel waveForm;
-	
-	private byte[] bytes;
 
-	private ExecutorService exec = Executors.newFixedThreadPool(1);
+	public int index;
 	
-	public PlayingThreadUDP(PlayerPropetrties p, LineListener l) throws LineUnavailableException, SocketException {
+	private ExecutorService exec = Executors.newFixedThreadPool(1);
+
+	public PlayingThreadUDP(int index, PlayerPropetrties p, LineListener l) throws LineUnavailableException, SocketException {
 		socket = new DatagramSocket(ClientConfig.UdpPort);
 		this.songDescriptors = p.getSongDescriptors();
 		this.bis = p.getBis();
-		this.bytes = new byte[p.getBufferSize()];
 		this.setFileSize(p.getFileSize());
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class, p.getFormat());
 		this.line = (SourceDataLine) AudioSystem.getLine(info);
@@ -49,9 +48,11 @@ public class PlayingThreadUDP implements Runnable {
 		isTerminated = false;
 		isDone = false;
 
-//		din = new AudioInputStream(bis, format, -1L);
+		//		din = new AudioInputStream(bis, format, -1L);
 
 		waveForm = new WaveFormPanel(UIConfig.frameWidth, 128);
+		
+		this.index = index;
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class PlayingThreadUDP implements Runnable {
 
 		int count = 0;
 		AudioFormat audioFormat = line.getFormat();
-		
+
 		final int DEF_BUFFER_SAMPLE_SZ = 1024;
 
 		final int normalBytes = normalBytesFromBits(audioFormat.getSampleSizeInBits());
@@ -76,48 +77,68 @@ public class PlayingThreadUDP implements Runnable {
 		line.start();
 
 		try {
-			socket.setSoTimeout(1000);
+			socket.setSoTimeout(3000);
+			
 		} catch (SocketException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		// Each time a packet is read (by recieve) its added to a list of packets that needed to be written to line by order
-		byte[] initialBuf = new byte[ServerConfig.DATAGRAM_PACKET_SIZE*110];
-		int initialBufSize = 0;
-		boolean initialBufUsed = false;
 		do {		
 			byte[] buf = new byte[ServerConfig.DATAGRAM_PACKET_SIZE];
 			DatagramPacket packet = new DatagramPacket(buf, ServerConfig.DATAGRAM_PACKET_SIZE);
 			try {
 				socket.receive(packet);
 				count = packet.getLength();
-				
+
 				Runnable runnable = new WriteToLineThread(line, audioFormat, buf, count, transfer, waveForm,
-                        samples, normalBytes);
+						samples, normalBytes);
 				exec.execute(runnable);
 
-				
+
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("could not get any more data, assuming sending done");
 				break;
+			}
+
+
+		} while (count >0 && !isTerminated);
+
+		
+		while (!isTerminated) {
+			try {
+				boolean isFinished = exec.awaitTermination(100, TimeUnit.MILLISECONDS);
+				if(isFinished) {
+					break;
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 			
 			
-		} while (count >0 && !isTerminated);
+		}
+		
+		exec.shutdownNow();
+		
+		socket.close();
 
+//		if(!isTerminated) {
+//			System.out.println("starting to drain");
+//			line.drain();
+//			System.out.println("finish drain");
+//		}
+		line.stop();
+		line.close();
+		System.out.println("Line closed");
 		try {
 			bis.close();
-			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		line.drain();
-		line.stop();
-		line.close();
 		line = null;
 		isDone = true;
+		
 	}
 
 	public void start() {
@@ -139,12 +160,8 @@ public class PlayingThreadUDP implements Runnable {
 	}
 
 	public void stop() {
-		if (!isTerminated) {
-			isPlaying = false;
-			isTerminated = true;
-		} else
-			System.out.println(getClass() + " trying to stop but song already paused or stopped.\n" + "isPlaying = "
-					+ isPlaying + "\n" + "isTerminated = " + isTerminated);
+		isPlaying = false;
+		isTerminated = true;
 	}
 
 	public SongDescriptors getSongDescriptors() {

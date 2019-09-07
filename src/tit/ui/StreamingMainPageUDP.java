@@ -23,7 +23,6 @@ import tit.audio.PlayingThreadUDP;
 import tit.communication.UDPStreamingClient;
 import tit.configuration.ServerConfig;
 import tit.configuration.UIConfig;
-import tit.dataManagment.DataManagmentUtilities;
 import tit.objects.MediaPanelColors;
 
 public class StreamingMainPageUDP extends JFrame
@@ -35,21 +34,20 @@ public class StreamingMainPageUDP extends JFrame
 
 	TitLineListener titLineListener;
 	private UDPStreamingClient streamingClient;
-	DataManagmentUtilities dataManager;
 	PlayingThreadUDP player ;
 	ExecutorService executor;
 
 	private StreamingSongPanel songPanel;
 	private ControlPanel controlPanel;
 
+	private MediaPanelColors mpc;
+	
 	private String[] categories;
 
 	public StreamingMainPageUDP() throws UnknownHostException, CommunicationException, IOException, LineUnavailableException 
 	{
-		dataManager = new DataManagmentUtilities();
 //		tcpClient = new TCPClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
-		streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort,
-				dataManager.getClientBaseFolder());
+		streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort);
 		executor = Executors.newFixedThreadPool(1);
 
 		this.addWindowListener(new WindowAdapter() {
@@ -64,21 +62,14 @@ public class StreamingMainPageUDP extends JFrame
 			}
 		});
 
-		System.out.println("initiated streaming client");
-
-//		categories = tcpClient.getCategories();
-
 		PlayerPropetrties playerPropetrties = streamingClient.getSongDetailsAndData("led zepplin");
-		System.out.println("After all shit");
-		player = new PlayingThreadUDP(playerPropetrties, new TitLineListener());
-		player.addLineListener(new TitLineListener());
-//		streamingClient.getAudioData();
-		
+		player = new PlayingThreadUDP(0, playerPropetrties, new TitLineListener());		
 
-		this.setResizable(false);
 		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongDescriptors())  ;
 		controlPanel = new ControlPanel(categories);
+		controlPanel.setPlayingThread(player);
 
+		this.setResizable(false);
 		JPanel pane = new JPanel();
 		
 		this.add(pane,BorderLayout.CENTER);
@@ -88,8 +79,6 @@ public class StreamingMainPageUDP extends JFrame
 		gridBagLayout.rowWeights = new double[]{5.0, 1.0, 1.0};
 		
 		this.getContentPane().setLayout(gridBagLayout);
-//		pane.setLayout();
-//		pane.setBackground(Color.red);
 		
 		GridBagConstraints songPanelGbc = new GridBagConstraints();
 		songPanelGbc.fill = GridBagConstraints.BOTH;
@@ -117,12 +106,11 @@ public class StreamingMainPageUDP extends JFrame
 		this.setVisible(true);
 
 
-		MediaPanelColors mpc = songPanel.setSong(player.getSongDescriptors());
+		mpc = songPanel.setSong(player.getSongDescriptors());
+		controlPanel.setColors(mpc);
 		player.waveForm.setColors(mpc);
-		controlPanel.setPlayingThread(player, mpc);
 		executor.submit(player);
 
-		System.out.println("finished constructing Main Page");
 	}
 
 
@@ -138,40 +126,63 @@ public class StreamingMainPageUDP extends JFrame
 		public void update(LineEvent le) 
 		{			
 			if (le.getLine().equals(controlPanel.getPlayingThread().getLine()) && le.getType().equals(LineEvent.Type.CLOSE)) {
+					
+				
 				try {
-					streamingClient.disconnect();
 					System.out.println("streamingClient.disconnect();");
+					streamingClient.disconnect();
 
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-//				PlayerPropetrties properties;
-//				PlayingThreadUDP player = null;
-//				try
-//				{
-//					double d = Math.ceil(Math.random() * 2);
-//					if(d > 1)
-//						properties = streamingClient.getSongDetailsAndData("led zepplin");
-//					else properties = streamingClient.getSongDetailsAndData("asaf");
-//					player = new PlayingThreadUDP(properties, new TitLineListener());
-//				}
-//				catch (IOException | LineUnavailableException e)
-//				{
-//					e.printStackTrace();
-//				}
-//
-//				MediaPanelColors mpc = songPanel.setSong(player.getSongDescriptors());
-//
-//				try
-//				{
-//					controlPanel.setPlayingThread(player, mpc);
-//				}
-//				catch (Exception e)
-//				{
-//					e.printStackTrace();
-//				}
-//				executor.execute(player);
-//			}
+				
+				PlayerPropetrties playerPropetrties = null;
+				try {
+					streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort);
+					playerPropetrties = streamingClient.getSongDetailsAndData("led zepplin");
+					player = new PlayingThreadUDP(player.index + 1, playerPropetrties, new TitLineListener());		
+				} catch (CommunicationException | IOException | LineUnavailableException e) {
+					e.printStackTrace();
+				}
+				
+				StreamingMainPageUDP.this.getContentPane().removeAll();
+
+				
+				songPanel.setSong(player.getSongDescriptors());
+				
+				controlPanel.setPlayingThread(player);
+				
+				StreamingMainPageUDP.this.songPanel.setSong(playerPropetrties.getSongDescriptors());
+				
+				controlPanel.setColors(mpc);
+				player.waveForm.setColors(mpc);
+				
+
+				GridBagConstraints songPanelGbc = new GridBagConstraints();
+				songPanelGbc.fill = GridBagConstraints.BOTH;
+				songPanelGbc.gridx = 0;
+				songPanelGbc.gridy = 0;
+				
+				
+				GridBagConstraints controlPanelGbc = new GridBagConstraints();
+				controlPanelGbc.fill = GridBagConstraints.BOTH;
+				controlPanelGbc.gridx = 0;
+				controlPanelGbc.gridy = 1;
+
+				GridBagConstraints waveFormGbc = new GridBagConstraints();
+				waveFormGbc.fill = GridBagConstraints.BOTH;
+				waveFormGbc.gridx = 0;
+				waveFormGbc.gridy = 2;
+				
+
+				StreamingMainPageUDP.this.getContentPane().add(songPanel, songPanelGbc);
+				StreamingMainPageUDP.this.getContentPane().add(controlPanel, controlPanelGbc);
+				StreamingMainPageUDP.this.getContentPane().add(player.waveForm, waveFormGbc);
+				
+				StreamingMainPageUDP.this.getContentPane().repaint();
+
+				
+				executor.submit(player);
 			}
 		}
 	}

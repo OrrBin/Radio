@@ -8,7 +8,7 @@ package tit.configuration;
 public class ServerConfig
 {
 	//Folders
-	public static final String baseFolder = "D:\\projects\\RadioTit-server";
+	public static final String baseFolder = "D:\\projects\\RadioTit-server\\music";
 	public static final String musicFolder = baseFolder + "\\music";
 	public static final String imagesFolder = baseFolder + "\\images";
 

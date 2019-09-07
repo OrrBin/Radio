@@ -48,7 +48,7 @@ public class SendSongAudioDataThread extends Thread {
 			while (isSending == true && (count = audioIS.read(songBytes)) > 0) {
 				DatagramPacket packet = new DatagramPacket(songBytes, count, clientSocket.getInetAddress(), ClientConfig.UdpPort);
 				socket.send(packet);	
-				Thread.sleep(15);
+				Thread.sleep(3);
 			}
 			
 		} catch (InterruptedException e) {
@@ -56,10 +56,12 @@ public class SendSongAudioDataThread extends Thread {
 		}
 
 		finally {
-			if (socket != null)
+			if (socket != null) {
 				socket.close();
-			if (audioIS != null)
+				System.out.println("socket is close");}
+			if (audioIS != null) {
 				audioIS.close();
+				System.out.println("audiois is close");}
 		}
 	}
 }

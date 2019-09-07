@@ -1,19 +1,14 @@
 package tit.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
-import tit.audio.PlayingThread;
 import tit.audio.PlayingThreadUDP;
 import tit.objects.MediaPanelColors;
 import utilities.Util;
@@ -52,18 +47,6 @@ public class ControlPanel extends JPanel
 		progress.setEnabled(true);
 		timeLabel = new JLabel("0");
 		
-//		JPanel buttonsPanel = new JPanel();
-//		buttonsPanel.add(play);
-//		buttonsPanel.add(pause);
-//		buttonsPanel.add(skip);
-//		
-//		JPanel timePanel = new JPanel();
-//		timePanel.add(progress);
-//		timePanel.add(timeLabel);
-//		
-//		this.add(buttonsPanel, BorderLayout.NORTH);
-//		this.add(timePanel, BorderLayout.EAST);
-		
 		this.add(play);
 		this.add(pause);
 		this.add(skip);
@@ -77,6 +60,10 @@ public class ControlPanel extends JPanel
 	@Override
 	public void paint(Graphics arg0) 
 	{
+		if(playingThread == null || playingThread.isTerminated()) {
+			repaint();
+			return;
+		}
 		super.paint(arg0);
 
 		if(playingThread != null) {
@@ -87,7 +74,7 @@ public class ControlPanel extends JPanel
 		repaint();
 	}
 	
-	public void setPlayingThread(PlayingThreadUDP thread, MediaPanelColors mpc)
+	public void setPlayingThread(PlayingThreadUDP thread)
 	{
 		//		if(this.playingThread != null)
 		//		{
@@ -103,7 +90,6 @@ public class ControlPanel extends JPanel
 		float lengthInSeconds = ((songFIleLength/frameSize)/frameRate);
 		progress.setMaximum((int)(lengthInSeconds * 1000));
 		
-		setColors(mpc);
 		this.repaint();
 		//			}
 		//			else System.out.println(getClass() + " Setting new playing thread while the current thread isnt terminated");
@@ -112,7 +98,7 @@ public class ControlPanel extends JPanel
 
 	}
 
-	private void setColors(MediaPanelColors mpc)
+	public void setColors(MediaPanelColors mpc)
 	{
 		this.setBackground(mpc.getBackgroundColor());
 		play.setBackground(mpc.getBackgroundColor());
@@ -166,9 +152,6 @@ public class ControlPanel extends JPanel
 		{
 			System.out.println("stopping thread : " + playingThread);
 			playingThread.stop();
-
-			//TODO: adding the skip action - playing the next song
-
 		}
 	}
 

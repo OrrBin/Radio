@@ -41,13 +41,8 @@ public class UDPStreamingClient {
 	InputStreamReader inFromServer;
 	BufferedReader stringInFromServer;
 
-	private File musicDirectory;
-	private File imagesDirectory;
-
-	public UDPStreamingClient(String server, int port, File baseDirectory)
+	public UDPStreamingClient(String server, int port)
 			throws UnknownHostException, IOException, CommunicationException {
-		//this.musicDirectory = new File(baseDirectory.getPath() + ClientConfig.DefaultMusicFolder);
-		//this.imagesDirectory = new File(baseDirectory.getPath() + ClientConfig.DefaultImagesFolder);
 		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
 		output = new DataOutputStream(clientSocket.getOutputStream());
 	}
