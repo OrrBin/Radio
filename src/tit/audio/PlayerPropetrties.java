@@ -13,7 +13,7 @@ public class PlayerPropetrties
 	private int bufferSize;
 	private long fileSize;
 	private SongDescriptors songDescriptors;
-	
+
 	public PlayerPropetrties(Socket socket, BufferedInputStream bis, AudioFormat format, int bufferSize,
 							 long fileSize, SongDescriptors songDescriptors)
 	{

@@ -56,7 +56,7 @@ public class UDPStreamingClient {
 		BufferedOutputStream songBos = null;
 		BufferedOutputStream imageBos = null;
 		ByteArrayOutputStream baos = null;
-
+        long duration;
 		SourceDataLine line;
 		AudioFormat format;
 
@@ -150,10 +150,14 @@ public class UDPStreamingClient {
 			count += bis.read(headerBytes, 0, ServerConfig.SIGNED_HEADER_SIZE);
 			signed = Util.byteArrayToBoolean(headerBytes);
 
-			// Read BigEndian header (boolean - 1 byte)
-			headerBytes = new byte[ServerConfig.BIGENDIAN_HEADER_SIZE];
-			count += bis.read(headerBytes, 0, ServerConfig.BIGENDIAN_HEADER_SIZE);
-			bigEndian = Util.byteArrayToBoolean(headerBytes);
+            // Read BigEndian header (boolean - 1 byte)
+            headerBytes = new byte[ServerConfig.BIGENDIAN_HEADER_SIZE];
+            count += bis.read(headerBytes, 0, ServerConfig.BIGENDIAN_HEADER_SIZE);
+            bigEndian = Util.byteArrayToBoolean(headerBytes);
+
+            headerBytes = new byte[ServerConfig.LONG_HEADER_SIZE];
+            count += bis.read(headerBytes, 0, ServerConfig.LONG_HEADER_SIZE);
+            duration = Util.byteArrayToLong(headerBytes);
 
 			format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
 
@@ -166,9 +170,8 @@ public class UDPStreamingClient {
 			System.out.println("signed : " + signed);
 			System.out.println("bigEndian : " + bigEndian);
 
-			// TODO : add genere and image
 			playerPropetrties = new PlayerPropetrties(clientSocket, bis, format, bufferSize, fileSize,
-					new SongDescriptors(songName, albumName, artistName, category));
+					new SongDescriptors(songName, albumName, artistName, category, duration));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

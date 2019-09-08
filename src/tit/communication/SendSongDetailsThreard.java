@@ -92,6 +92,7 @@ public class SendSongDetailsThreard extends Thread {
 		out.write(Util.leIntToByteArray(song.getChannels()));
 		out.write(Util.booleanToByteArray(song.isSigned()));
 		out.write(Util.booleanToByteArray(song.isBigEndian()));
+		out.write(Util.longToByteArray(song.getDuration()));
 	}
 
 	// will return a string and its size to send

@@ -73,7 +73,13 @@ public class Util
 
 		bb.putInt(bolInt);
 		return bb.array();
-	}	
+	}
+
+	public static byte[] longToByteArray(long x) {
+		ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+		buffer.putLong(x);
+		return buffer.array();
+	}
 
 	/**
 	 * returns byte array with{ServerConfig.NUMBER_HEADER_SIZE} cells,

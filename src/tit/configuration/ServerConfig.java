@@ -8,7 +8,7 @@ package tit.configuration;
 public class ServerConfig
 {
 	//Folders
-	public static final String baseFolder = "D:\\projects\\RadioTit-server\\music";
+	public static final String baseFolder = "RadioTit-server\\music\\";
 	public static final String musicFolder = baseFolder + "\\music";
 	public static final String imagesFolder = baseFolder + "\\images";
 
@@ -32,7 +32,7 @@ public class ServerConfig
 	public static final int NUMBER_HEADER_SIZE = 4;
 	public static final int LONG_NUMBER_HEADER_SIZE = 8;
 	public static final int BOOLEAN_HEADER_SIZE = 4;
-//	public static final int STRING_HEADER_SIZE = 128;
+	public static final int LONG_HEADER_SIZE = 8;
 	
 	public static final int SONG_NAME_SIZE_HEADER_SIZE = NUMBER_HEADER_SIZE;
 	public static final int ALBUM_NAME_SIZE_HEADER_SIZE = NUMBER_HEADER_SIZE;
@@ -49,7 +49,7 @@ public class ServerConfig
 	public static final int CHANNELS_HEADER_SIZE = NUMBER_HEADER_SIZE;
 	public static final int SIGNED_HEADER_SIZE = BOOLEAN_HEADER_SIZE;
 	public static final int BIGENDIAN_HEADER_SIZE = BOOLEAN_HEADER_SIZE;
-	
+	public static final int DURATION_HEADER_SIZE = LONG_HEADER_SIZE;
 
 	public static final String DEFAULT_CHARSET_NAME = "UTF-8";
 }

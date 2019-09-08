@@ -20,8 +20,6 @@ import tit.objects.MediaPanelColors;
 public class WaveFormPanel extends JPanel 
 {
 		private static final long serialVersionUID = -2742408715579486340L;
-		private JLabel timeLabel;
-		
 		
 		public final int DEF_BUFFER_SAMPLE_SZ = 1024;
 		public final Color LIGHT_BLUE = new Color(128, 192, 255);
@@ -32,8 +30,6 @@ public class WaveFormPanel extends JPanel
 	    public WaveFormPanel (int width, int height) 
 		{	
 			setOpaque(false);
-			timeLabel = new JLabel("0");
-			this.add(timeLabel);
 			this.setVisible(true);
 
 			repaint();
@@ -174,8 +170,7 @@ public class WaveFormPanel extends JPanel
 		public void setColors(MediaPanelColors mpc)
 		{
 			this. mpc = mpc;
-			this.setBackground(mpc.getBackgroundColor());			
-			timeLabel.setForeground(mpc.getLabelsColors());
+			this.setBackground(mpc.getBackgroundColor());
 		}  
         
 }

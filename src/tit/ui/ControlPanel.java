@@ -84,11 +84,12 @@ public class ControlPanel extends JPanel
 		pause.setVisible(true);
 		this.playingThread = thread;
 		
-		long songFIleLength = this.playingThread.getFileSize(); 
+		long songFIleLength = this.playingThread.getFileSize();
+		long duration = this.playingThread.getSongDescriptors().getDuration();
 		int frameSize = this.playingThread.getLine().getFormat().getFrameSize();
 		float frameRate = this.playingThread.getLine().getFormat().getFrameRate();
 		float lengthInSeconds = ((songFIleLength/frameSize)/frameRate);
-		progress.setMaximum((int)(lengthInSeconds * 1000));
+		progress.setMaximum((int)(duration));
 		
 		this.repaint();
 		//			}
