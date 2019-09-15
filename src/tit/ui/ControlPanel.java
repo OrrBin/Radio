@@ -1,13 +1,10 @@
 package tit.ui;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
+import javax.swing.*;
 
 import tit.audio.PlayingThreadUDP;
 import tit.objects.MediaPanelColors;
@@ -24,10 +21,10 @@ public class ControlPanel extends JPanel
 	private JButton play;
 	private JButton pause;
 	private JButton skip;
-	private JSlider progress;
+	private JProgressBar progress;
 	private JLabel timeLabel;
 	//	MediaPanelColors mpc;
-	
+
 	public ControlPanel(String[] categories) 
 	{	
 		play = new JButton("play");
@@ -43,7 +40,7 @@ public class ControlPanel extends JPanel
 		skip.addActionListener(new SkipActionListener());
 		skip.setVisible(true);
 		
-		progress = new JSlider(); // (0, 1000, 0);
+		progress = new JProgressBar(); // (0, 1000, 0);
 		progress.setEnabled(true);
 		timeLabel = new JLabel("0");
 		
@@ -58,7 +55,7 @@ public class ControlPanel extends JPanel
 	}
 
 	@Override
-	public void paint(Graphics arg0) 
+	public void paint(Graphics arg0)
 	{
 		if(playingThread == null || playingThread.isTerminated()) {
 			repaint();
@@ -67,13 +64,16 @@ public class ControlPanel extends JPanel
 		super.paint(arg0);
 
 		if(playingThread != null) {
-			int audioPosition = (int) (playingThread.getLine().getMicrosecondPosition() / 1000);
+			int audioPosition = (int) (playingThread.getLine().getMicrosecondPosition()/ 1000);
+			progress.setForeground(new Color(20));
+			progress.setBackground(new Color(99999));
 			progress.setValue(audioPosition);
-			timeLabel.setText(Util.convertSecondsToStringTime(audioPosition / 1000));
+			// TODO - it feels like the clock is moving too fast
+			timeLabel.setText(Util.convertSecondsToStringTime(audioPosition/1000));
 		}
 		repaint();
 	}
-	
+
 	public void setPlayingThread(PlayingThreadUDP thread)
 	{
 		//		if(this.playingThread != null)
@@ -83,14 +83,14 @@ public class ControlPanel extends JPanel
 		play.setVisible(false);
 		pause.setVisible(true);
 		this.playingThread = thread;
-		
+
 		long songFIleLength = this.playingThread.getFileSize();
-		long duration = this.playingThread.getSongDescriptors().getDuration();
+		long durationInMili = this.playingThread.getSongDescriptors().getDuration();
 		int frameSize = this.playingThread.getLine().getFormat().getFrameSize();
 		float frameRate = this.playingThread.getLine().getFormat().getFrameRate();
 		float lengthInSeconds = ((songFIleLength/frameSize)/frameRate);
-		progress.setMaximum((int)(duration));
-		
+		progress.setMaximum((int)(durationInMili));
+
 		this.repaint();
 		//			}
 		//			else System.out.println(getClass() + " Setting new playing thread while the current thread isnt terminated");
@@ -128,6 +128,7 @@ public class ControlPanel extends JPanel
 			playingThread.start();
 			play.setVisible(false);
 			pause.setVisible(true);
+
 		}
 	}
 
@@ -165,6 +166,5 @@ public class ControlPanel extends JPanel
 	{
 		
 	}
-	
 
 }

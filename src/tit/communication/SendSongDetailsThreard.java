@@ -6,9 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import tit.dbUtilities.AudioUtil;
+
 import utilities.Util;
 import tit.audio.songData;
 
@@ -92,7 +91,7 @@ public class SendSongDetailsThreard extends Thread {
 		out.write(Util.leIntToByteArray(song.getChannels()));
 		out.write(Util.booleanToByteArray(song.isSigned()));
 		out.write(Util.booleanToByteArray(song.isBigEndian()));
-		out.write(Util.longToByteArray(song.getDuration()));
+		out.write(Util.longToByteArray(song.getDurationInMili()));
 	}
 
 	// will return a string and its size to send

@@ -47,7 +47,6 @@ public class Util
 	public static byte[] LongToByteArray(long l)
 	{
 		final ByteBuffer bb = ByteBuffer.allocate(ServerConfig.LONG_NUMBER_HEADER_SIZE);
-		bb.order(ByteOrder.LITTLE_ENDIAN);
 		bb.putLong(l);
 		return bb.array();
 	}
@@ -121,8 +120,9 @@ public class Util
 
 	public static long byteArrayToLong(byte[] b) 
 	{
-		final ByteBuffer bb = ByteBuffer.wrap(b);
-		bb.order(ByteOrder.LITTLE_ENDIAN);
+		final ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+		bb.put(b);
+		bb.flip();
 		return bb.getLong();
 	}
 

@@ -39,7 +39,7 @@ public class songData {
 		this.isSigned = true;
 		this.isBigEndian = decodedFormat.isBigEndian();
 
-		this.duration = getDuration(songFile);
+		this.duration = getDurationInMili(songFile);
 
 		try
 		{
@@ -62,7 +62,7 @@ public class songData {
 
 	}
 
-	private long getDuration(File file) throws UnsupportedAudioFileException, IOException {
+	private long getDurationInMili(File file) throws UnsupportedAudioFileException, IOException {
 
 		AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(file);
 		if (fileFormat instanceof TAudioFileFormat) {
@@ -70,6 +70,9 @@ public class songData {
 			String key = "duration";
 			Long microseconds = (Long) properties.get(key);
 			int mili = (int) (microseconds / 1000);
+			int sec = (int) (mili/1000) %60;
+			int min = (int) (mili/1000) /60;
+			System.out.println("mili:"+mili+"   min:"+min+"   sec:"+sec);
 			return mili;
 		} else {
 			throw new UnsupportedAudioFileException();
@@ -113,7 +116,7 @@ public class songData {
 		return isBigEndian;
 	}
 
-	public long getDuration() {
+	public long getDurationInMili() {
 		return duration;
 	}
 
