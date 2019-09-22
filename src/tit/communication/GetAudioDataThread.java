@@ -2,9 +2,8 @@ package tit.communication;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 
-import tit.configuration.ClientConfig;
+import tit.client.ClientConfig;
 import utilities.Util;
 
 public class GetAudioDataThread extends Thread {

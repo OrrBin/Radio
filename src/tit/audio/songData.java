@@ -12,7 +12,7 @@ import org.farng.mp3.MP3File;
 import org.farng.mp3.id3.AbstractID3v2;
 
 import org.tritonus.share.sampled.file.TAudioFileFormat;
-import tit.dbUtilities.AudioUtil;
+import utilities.AudioUtil;
 
 public class songData {
 

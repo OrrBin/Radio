@@ -1,4 +1,4 @@
-package tit.dbUtilities;
+package utilities;
 
 import java.io.File;
 import java.io.IOException;

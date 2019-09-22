@@ -1,6 +1,6 @@
 //package tit.run;
 //
-//import tit.ui.MainPage;
+//import tit.client.ui.MainPage;
 //
 //public class Main {
 //

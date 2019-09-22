@@ -1,4 +1,4 @@
-package tit.ui;
+package tit.client.ui;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -18,10 +18,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import tit.audio.PlayerPropetrties;
-import tit.audio.PlayingThreadUDP;
-import tit.communication.UDPStreamingClient;
-import tit.configuration.ServerConfig;
+import tit.client.audio.PlayerPropetrties;
+import tit.client.audio.PlayingThreadUDP;
+import tit.client.UDPStreamingClient;
+import tit.server.ServerConfig;
 import tit.configuration.UIConfig;
 import tit.objects.MediaPanelColors;
 
@@ -63,7 +63,8 @@ public class StreamingMainPageUDP extends JFrame
 		});
 
 		PlayerPropetrties playerPropetrties = streamingClient.getSongDetailsAndData("led zepplin");
-		player = new PlayingThreadUDP(0, playerPropetrties, new TitLineListener());		
+		streamingClient.getAdioData();
+		player = new PlayingThreadUDP(playerPropetrties, new TitLineListener());
 
 		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongDescriptors())  ;
 		controlPanel = new ControlPanel(categories);
@@ -140,7 +141,8 @@ public class StreamingMainPageUDP extends JFrame
 				try {
 					streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort);
 					playerPropetrties = streamingClient.getSongDetailsAndData("led zepplin");
-					player = new PlayingThreadUDP(player.index + 1, playerPropetrties, new TitLineListener());		
+					streamingClient.getAdioData();
+					player = new PlayingThreadUDP(playerPropetrties, new TitLineListener());
 				} catch (CommunicationException | IOException | LineUnavailableException e) {
 					e.printStackTrace();
 				}

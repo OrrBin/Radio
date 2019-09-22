@@ -1,7 +1,6 @@
-package tit.ui;
+package tit.client.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import tit.audio.SongDescriptors;
+import tit.audio.Song;
 import tit.configuration.UIConfig;
 import tit.imageProcessing.FontProcessor;
 import tit.imageProcessing.ImageProcessor;
@@ -30,38 +29,24 @@ import tit.objects.SongPanelColors;
  *  
  *
  */
-public class StreamingSongPanel extends JPanel 
+public class SongPanel extends JPanel 
 {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6716699269429005928L;
-
-	private static Color textColor = new Color(249,211,66);
-	private static Color backgroundColor = new Color(41, 40, 38);
-
-	private static SongPanelColors spc = new SongPanelColors(textColor, textColor, textColor, backgroundColor);
-	private static MediaPanelColors mpc = new MediaPanelColors(backgroundColor, textColor, textColor);
-
-	private SongDescriptors songDesc;
-	private SongPanelColors songPanelColors = spc;
+	private Song song;
+	private SongPanelColors songPanelColors;
 	private JLabel songNameLabel;
 	private JLabel albumNameLabel;
 	private JLabel artistNameLabel;
 	private BufferedImage backgroundImage;
-
+	
 	private String[] categories;
-
-
+	
+	
 	JComboBox<String> categoriesBox;
 	GridBagConstraints gc;
 
-	public StreamingSongPanel(String[] categories, SongDescriptors song)
+	public SongPanel(String[] categories)
 	{
 		super();
-
-		setSong(song);
 
 		this.categories = categories;
 		categoriesBox = new JComboBox<>(this.categories);
@@ -69,17 +54,17 @@ public class StreamingSongPanel extends JPanel
 		categoriesBox.setFont(new Font("Univers", Font.PLAIN, 20));
 		categoriesBox.setVisible(true);
 
-		//		this.setLayout(new GridBagLayout());
+//		this.setLayout(new GridBagLayout());
 		gc = new GridBagConstraints();
 		gc.gridx = 0;
-		gc.gridy = 1;
-		gc.insets = new Insets(2, 0, 0, 2);
-		gc.anchor = GridBagConstraints.NORTHWEST;
-		gc.weightx = 1;
-		gc.weighty = 1;
+        gc.gridy = 1;
+        gc.insets = new Insets(2, 0, 0, 2);
+        gc.anchor = GridBagConstraints.NORTHWEST;
+        gc.weightx = 1;
+        gc.weighty = 1;
 
 
-
+		
 		this.setLayout(new BorderLayout(0, 0));
 
 		songNameLabel = new JLabel();
@@ -102,12 +87,6 @@ public class StreamingSongPanel extends JPanel
 		artistNameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		artistNameLabel.setFont(UIConfig.artistNameFont);
 
-
-
-	}
-
-	public void setDetails(SongDescriptors desc) {
-		this.setSong(desc);
 	}
 
 	@Override
@@ -116,10 +95,9 @@ public class StreamingSongPanel extends JPanel
 		super.paintComponent(g);
 
 		Rectangle panelSize = this.getBounds();
-		this.setBackground(songPanelColors.getBackgroundColor());
 
 		//Drawing the background image
-		//		g.drawImage(backgroundImage, 0, 0, (int)panelSize.getWidth(), (int)panelSize.getHeight(), null);
+		g.drawImage(backgroundImage, 0, 0, (int)panelSize.getWidth(), (int)panelSize.getHeight(), null);
 
 		// get metrics from the graphics
 		FontMetrics metrics = g.getFontMetrics(UIConfig.songNameFont);
@@ -128,9 +106,9 @@ public class StreamingSongPanel extends JPanel
 		int hgt = metrics.getHeight();
 		// get the advance of my text in this font
 		// and render context
-		int nameWidth = metrics.stringWidth(songDesc.getSongName());
-		int albumWidth = metrics.stringWidth(songDesc.getAlbumName());
-		int artistWidth = metrics.stringWidth(songDesc.getArtistName());
+		int nameWidth = metrics.stringWidth(song.getSongName());
+		int albumWidth = metrics.stringWidth(song.getAlbumName());
+		int artistWidth = metrics.stringWidth(song.getArtistName());
 		// calculate the size of a box to hold the
 		// text with some padding.
 		Dimension nameSize = new Dimension(nameWidth+2, hgt+2);
@@ -150,17 +128,32 @@ public class StreamingSongPanel extends JPanel
 		int artistY = (int) (3 * panelSize.getHeight() / 4);
 
 		//Draw song name
-		FontProcessor.outLine(g, songDesc.getSongName(), songPanelColors.getBackgroundColor(), songPanelColors.getSongColor(), nameX, nameY, UIConfig.songNameFont);
+		FontProcessor.outLine(g, song.getSongName(), songPanelColors.getBackgroundColor(), songPanelColors.getSongColor(), nameX, nameY, UIConfig.songNameFont);
 		//Draw album Name
-		FontProcessor.outLine(g, songDesc.getAlbumName(), songPanelColors.getBackgroundColor(), songPanelColors.getAlbumColor(), albumX, albumY, UIConfig.albumNameFont);
+		FontProcessor.outLine(g, song.getAlbumName(), songPanelColors.getBackgroundColor(), songPanelColors.getAlbumColor(), albumX, albumY, UIConfig.albumNameFont);
 		//Draw artist name
-		FontProcessor.outLine(g, songDesc.getArtistName(), songPanelColors.getBackgroundColor(), songPanelColors.getArtistColor(), artistX, artistY, UIConfig.artistNameFont);
+		FontProcessor.outLine(g, song.getArtistName(), songPanelColors.getBackgroundColor(), songPanelColors.getArtistColor(), artistX, artistY, UIConfig.artistNameFont);
+		
+		categoriesBox.setBackground(songPanelColors.getBackgroundColor());
+		categoriesBox.setForeground(songPanelColors.getSongColor());
+		
+		this.add(categoriesBox, BorderLayout.PAGE_END);
+
+
+
+		//Add labels
+		//		this.setVisible(true);
+		//		setVisible(true);
+
+		//		this.repaint();
+		//		this.setVisible(true);
+		//		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{songNameLabel, albumNameLabel, artistNameLabel}));
 	}
 
-	public SongDescriptors getSong() {
-		return songDesc;
+	public Song getSong() {
+		return song;
 	}
-
+	
 	public String[] getCategories() {
 		return categories;
 	}
@@ -170,29 +163,13 @@ public class StreamingSongPanel extends JPanel
 	}
 
 
-	public MediaPanelColors setSong(SongDescriptors song)
+	public MediaPanelColors setSong(Song song) 
 	{
-		this.songDesc = song;
+		this.song = song;
+		//Update UI to the new song
+		MediaPanelColors mpc = updateSongData();
 
-		if(songNameLabel != null) {
-			songNameLabel.setText(songDesc.getSongName());
-			songNameLabel.setForeground(spc.getSongColor());
-		}
-
-		if(albumNameLabel != null) {
-			albumNameLabel.setText(songDesc.getAlbumName());
-			albumNameLabel.setForeground(spc.getAlbumColor());
-		}
-
-		if( artistNameLabel != null) {
-			artistNameLabel.setText(songDesc.getArtistName());
-			artistNameLabel.setForeground(spc.getArtistColor());
-		}
-
-		repaint();
 		return mpc;
-
-
 	}
 
 	public SongPanelColors getLabelsColors() {
@@ -208,46 +185,43 @@ public class StreamingSongPanel extends JPanel
 	 */
 	private MediaPanelColors updateSongData()
 	{
-		//		SongPanelColors spc = null;
-		//		MediaPanelColors mpc = null;
-		//		
+		SongPanelColors spc = null;
+		MediaPanelColors mpc = null;
+		try {
+			spc = ImageProcessor.getSongPanelColors(song.getSongImage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		//		try {
-		//			spc = ImageProcessor.getSongPanelColors(song.getSongImage());
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
+		try {
+			mpc = ImageProcessor.getMediaPanelColors(song.getSongImage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-
-
-		//		try {
-		//			mpc = ImageProcessor.getMediaPanelColors(song.getSongImage());
-		//		} catch (IOException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		}
-
-		//		songNameLabel.setText(songDesc.getSongName());
-		//		songNameLabel.setForeground(spc.getSongColor());
-		//
-		//		albumNameLabel.setText(songDesc.getAlbumName());
-		//		albumNameLabel.setForeground(spc.getAlbumColor());
-		//
-		//		artistNameLabel.setText(songDesc.getArtistName());
-		//		artistNameLabel.setForeground(spc.getArtistColor());
+//		songNameLabel.setText(song.getSongName());
+//		songNameLabel.setForeground(spc.getSongColor());
+//
+//		albumNameLabel.setText(song.getAlbumName());
+//		albumNameLabel.setForeground(spc.getAlbumColor());
+//
+//		artistNameLabel.setText(song.getArtistName());
+//		artistNameLabel.setForeground(spc.getArtistColor());
 
 		songPanelColors = spc;
 
 		//Processing the image for the background
 		try {
-			backgroundImage = ImageProcessor.processImage(songDesc.getSongImage());
+			backgroundImage = ImageProcessor.processImage(song.getSongImage());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		this.repaint();
-
+		
 		return mpc;
 		//		this.setVisible(false);
 		//		this.setVisible(true);

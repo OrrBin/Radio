@@ -1,4 +1,4 @@
-package tit.configuration;
+package tit.client;
 
 public class ClientConfig
 {

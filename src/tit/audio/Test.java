@@ -1,7 +1,6 @@
 package tit.audio;
 
 import java.awt.BorderLayout;
-import java.io.File;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -16,7 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import tit.configuration.UIConfig;
-import tit.ui.SongPanel;
+import tit.client.ui.SongPanel;
 
 public class Test {
 

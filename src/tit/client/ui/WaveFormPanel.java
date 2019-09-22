@@ -1,4 +1,4 @@
-package tit.ui;
+package tit.client.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,7 +11,6 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 
 import javax.sound.sampled.AudioFormat;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import tit.configuration.UIConfig;

@@ -11,8 +11,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.sql.SQLException;
 
-import tit.configuration.ClientConfig;
-import tit.configuration.ServerConfig;
+import tit.client.ClientConfig;
+import tit.server.ServerConfig;
 import utilities.Util;
 
 class StreamingConnectionUDP extends Thread {
@@ -28,7 +28,7 @@ class StreamingConnectionUDP extends Thread {
     SendCategoriesThread sendCategoriesThread;
     boolean isRunning = true;
 
-    public StreamingConnectionUDP(Socket aClientSocket) throws ClassNotFoundException, SQLException {
+    public StreamingConnectionUDP(Socket aClientSocket) {
         try {
             clientSocket = aClientSocket;
             address = aClientSocket.getInetAddress();

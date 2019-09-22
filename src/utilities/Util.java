@@ -7,8 +7,8 @@ import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import tit.configuration.ClientConfig;
-import tit.configuration.ServerConfig;
+import tit.client.ClientConfig;
+import tit.server.ServerConfig;
 
 public class Util
 {

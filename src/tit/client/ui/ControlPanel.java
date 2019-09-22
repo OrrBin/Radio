@@ -1,4 +1,4 @@
-package tit.ui;
+package tit.client.ui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import tit.audio.PlayingThreadUDP;
+import tit.client.audio.PlayingThreadUDP;
 import tit.objects.MediaPanelColors;
 import utilities.Util;
 

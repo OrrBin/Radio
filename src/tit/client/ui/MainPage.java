@@ -1,4 +1,4 @@
-//package tit.ui;
+//package tit.client.ui;
 //
 //import java.awt.BorderLayout;
 //import java.io.File;
@@ -39,7 +39,7 @@
 //import tit.audio.Song;
 //import tit.communication.TCPClient;
 //import tit.configuration.GeneralConfig;
-//import tit.configuration.ServerConfig;
+//import tit.server.ServerConfig;
 //import tit.configuration.UIConfig;
 //import tit.dataManagment.DataManagmentUtilities;
 //import tit.objects.MediaPanelColors;

@@ -1,9 +1,9 @@
-package tit.audio;
+package tit.server;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.SourceDataLine;
 
-import tit.ui.WaveFormPanel;
+import tit.client.ui.WaveFormPanel;
 
 public class WriteToLineThread implements Runnable {
 

@@ -1,4 +1,4 @@
-package tit.audio;
+package tit.client.audio;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -10,13 +10,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import javax.sound.sampled.*;
-import tit.configuration.ClientConfig;
-import tit.configuration.ServerConfig;
+
+import tit.audio.SongDescriptors;
+import tit.client.ClientConfig;
+import tit.server.ServerConfig;
 import tit.configuration.UIConfig;
-import tit.ui.WaveFormPanel;
+import tit.server.WriteToLineThread;
+import tit.client.ui.WaveFormPanel;
 
 public class PlayingThreadUDP implements Runnable {
-	DatagramSocket socket;
+	private DatagramSocket socket;
 
 	private SongDescriptors songDescriptors;
 	private BufferedInputStream bis;
@@ -28,12 +31,10 @@ public class PlayingThreadUDP implements Runnable {
 	private boolean isDone;
 
 	public WaveFormPanel waveForm;
-
-	public int index;
 	
 	private ExecutorService exec = Executors.newFixedThreadPool(1);
 
-	public PlayingThreadUDP(int index, PlayerPropetrties p, LineListener l) throws LineUnavailableException, SocketException {
+	public PlayingThreadUDP(PlayerPropetrties p, LineListener l) throws LineUnavailableException, SocketException {
 		socket = new DatagramSocket(ClientConfig.UdpPort);
 		this.songDescriptors = p.getSongDescriptors();
 		this.bis = p.getBis();
@@ -51,8 +52,7 @@ public class PlayingThreadUDP implements Runnable {
 		//		din = new AudioInputStream(bis, format, -1L);
 
 		waveForm = new WaveFormPanel(UIConfig.frameWidth, 128);
-		
-		this.index = index;
+
 	}
 
 	@Override
@@ -162,6 +162,10 @@ public class PlayingThreadUDP implements Runnable {
 	public void stop() {
 		isPlaying = false;
 		isTerminated = true;
+	}
+
+	public DatagramSocket getSocket() {
+		return this.socket;
 	}
 
 	public SongDescriptors getSongDescriptors() {

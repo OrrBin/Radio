@@ -1,4 +1,4 @@
-package tit.communication;
+package tit.client;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,10 +19,10 @@ import javax.naming.CommunicationException;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.SourceDataLine;
 
-import tit.audio.PlayerPropetrties;
+import tit.client.audio.PlayerPropetrties;
 import tit.audio.SongDescriptors;
-import tit.configuration.ClientConfig;
-import tit.configuration.ServerConfig;
+import tit.communication.GetAudioDataThread;
+import tit.server.ServerConfig;
 import utilities.Util;
 
 /**
@@ -94,7 +93,6 @@ public class UDPStreamingClient {
 			headerBytes = new byte[headerSize];
 			sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
 
-			System.out.println("read first header");
 			
 			// Read song name header
 			count += bis.read(headerBytes, 0, headerSize);
@@ -161,27 +159,17 @@ public class UDPStreamingClient {
 
 			format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
 
-			System.out.println("song : " + songName);
-			System.out.println("album : " + albumName);
-			System.out.println("artist : " + artistName);
-			System.out.println("sample rate : " + sampleRate);
-			System.out.println("sample size in bits : " + sampleSizeInBits);
-			System.out.println("channels : " + channels);
-			System.out.println("signed : " + signed);
-			System.out.println("bigEndian : " + bigEndian);
-
 			playerPropetrties = new PlayerPropetrties(clientSocket, bis, format, bufferSize, fileSize,
 					new SongDescriptors(songName, albumName, artistName, category, duration));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println("getting audio data");
-//		getAudioData(clientSocket);
-		new GetAudioDataThread(output).start();
 
 		return playerPropetrties;
+	}
 
+	public void getAdioData() {
+		new GetAudioDataThread(output).start();
 	}
 
 	public static int byteArrayToLeInt(byte[] b) {

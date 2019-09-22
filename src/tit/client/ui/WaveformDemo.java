@@ -9,7 +9,7 @@
  * 
  */
 
-package tit.ui;
+package tit.client.ui;
 
 import java.awt.EventQueue;
 import java.awt.Component;

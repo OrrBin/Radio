@@ -7,7 +7,7 @@
 //import javax.sound.sampled.*;
 //
 //import tit.configuration.UIConfig;
-//import tit.ui.WaveFormPanel;
+//import tit.client.ui.WaveFormPanel;
 //
 //public class PlayingThread implements Runnable 
 //{

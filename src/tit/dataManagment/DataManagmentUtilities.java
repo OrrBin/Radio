@@ -14,7 +14,7 @@ import com.mpatric.mp3agic.Mp3File;
 
 import tit.audio.Song;
 import tit.audio.SongMp3;
-import tit.configuration.ClientConfig;
+import tit.client.ClientConfig;
 import tit.configuration.DataManagmenetConfig;
 
 /**
@@ -128,11 +128,8 @@ public class DataManagmentUtilities
 		{
 			ID3v2 propertiesReader =song.getId3v2Tag();
 			title = propertiesReader.getTitle();
-			System.out.println("title=" + title);
 			album = propertiesReader.getAlbum();
-			System.out.println("album=" + album);
 			artist = propertiesReader.getArtist();
-			System.out.println("artist=" + artist);
 			genre = propertiesReader.getGenreDescription();
 			
 //TODO :			System.out.println("subString=" + title.substring(0,1));
@@ -181,11 +178,8 @@ public class DataManagmentUtilities
 		{
 			ID3v2 propertiesReader =song.getId3v2Tag();
 			title = propertiesReader.getTitle();
-			System.out.println("title=" + title);
 			album = propertiesReader.getAlbum();
-			System.out.println("album=" + album);
 			artist = propertiesReader.getArtist();
-			System.out.println("artist=" + artist);
 			genre = propertiesReader.getGenreDescription();
 			
 			//Find image file

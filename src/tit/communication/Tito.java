@@ -27,9 +27,9 @@
 //import javax.xml.transform.Source;
 //
 //import tit.audio.Song;
-//import tit.configuration.ClientConfig;
+//import tit.client.ClientConfig;
 //import tit.configuration.DataManagmenetConfig;
-//import tit.configuration.ServerConfig;
+//import tit.server.ServerConfig;
 //import tit.dataManagment.DataManagmentUtilities;
 //
 ///**

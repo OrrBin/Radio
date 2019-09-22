@@ -9,9 +9,9 @@ import java.net.Socket;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import tit.configuration.ClientConfig;
-import tit.configuration.ServerConfig;
-import tit.dbUtilities.AudioUtil;
+import tit.client.ClientConfig;
+import tit.server.ServerConfig;
+import utilities.AudioUtil;
 
 public class SendSongAudioDataThread extends Thread {
 
