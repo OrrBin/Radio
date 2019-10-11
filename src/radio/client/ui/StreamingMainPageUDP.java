@@ -130,7 +130,6 @@ public class StreamingMainPageUDP extends JFrame
 					
 				
 				try {
-					System.out.println("streamingClient.disconnect();");
 					streamingClient.disconnect();
 
 				} catch (IOException e) {

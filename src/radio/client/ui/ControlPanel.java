@@ -152,7 +152,6 @@ public class ControlPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
-			System.out.println("stopping thread : " + playingThread);
 			playingThread.stop();
 		}
 	}

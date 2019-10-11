@@ -56,12 +56,10 @@ public class SendSongAudioDataThread extends Thread {
 		}
 
 		finally {
-			if (socket != null) {
+			if (socket != null) 
 				socket.close();
-				System.out.println("socket is close");}
-			if (audioIS != null) {
+			if (audioIS != null) 
 				audioIS.close();
-				System.out.println("audiois is close");}
 		}
 	}
 }

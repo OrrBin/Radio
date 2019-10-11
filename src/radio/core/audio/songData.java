@@ -73,7 +73,6 @@ public class songData {
 			int mili = (int) (microseconds / 1000);
 			int sec = (int) (mili/1000) %60;
 			int min = (int) (mili/1000) /60;
-			System.out.println("mili:"+mili+"   min:"+min+"   sec:"+sec);
 			return mili;
 		} else {
 			throw new UnsupportedAudioFileException();

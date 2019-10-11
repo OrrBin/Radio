@@ -14,7 +14,7 @@ public class WriteToLineThread implements Runnable {
 	private long[] transfer;
 	private WaveFormPanel waveForm;
 	private float[] samples;
-	private int normalBytes ;	
+	private int normalBytes;
 
 	public WriteToLineThread(SourceDataLine line, AudioFormat audioFormat, byte[] data, int count, long[] transfer,
 			WaveFormPanel waveForm, float[] samples, int normalBytes) {
@@ -26,17 +26,14 @@ public class WriteToLineThread implements Runnable {
 		this.transfer = transfer;
 		this.waveForm = waveForm;
 		this.samples = samples;
-		this.normalBytes = normalBytes;	
+		this.normalBytes = normalBytes;
 	}
 
 	@Override
 	public void run() {
-		//		long startTime = System.currentTimeMillis();
-
-		while(line.available() < count) {
+		while (line.available() < count) {
 			// Just for making line.write be blocking
-			if(!line.isOpen()) {
-				System.out.println("line is not open , stop waiting");
+			if (!line.isOpen()) {
 				return;
 			}
 		}
@@ -177,6 +174,7 @@ public class WriteToLineThread implements Runnable {
 
 		return samples;
 	}
+
 	public static int normalBytesFromBits(int bitsPerSample) {
 
 		/*
