@@ -1,7 +1,6 @@
 package radio.client.ui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
@@ -24,7 +23,7 @@ public class WaveFormPanel extends JPanel
 		public final Color LIGHT_BLUE = new Color(128, 192, 255);
 	    public final Color DARK_BLUE = new Color(0, 0, 127);
 		
-	    MediaPanelColors mpc;
+	    MediaPanelColors mpc = StreamingSongPanel.mpc;
 		
 	    public WaveFormPanel (int width, int height) 
 		{	
@@ -51,9 +50,7 @@ public class WaveFormPanel extends JPanel
         
         private final Object pathLock = new Object();
         
-        {
-            Dimension pref = getPreferredSize();
-            
+        {            
             image = (
                 GraphicsEnvironment
                 .getLocalGraphicsEnvironment()

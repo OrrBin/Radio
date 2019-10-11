@@ -30,7 +30,6 @@ class StreamingConnectionUDP extends Thread {
         try {
             clientSocket = aClientSocket;
             address = aClientSocket.getInetAddress();
-            // TODO BufferedOutputStream outToClient = null;
 
             input = new DataInputStream(clientSocket.getInputStream());
             bfr = new BufferedReader(new InputStreamReader(input));
@@ -53,8 +52,10 @@ class StreamingConnectionUDP extends Thread {
                 break;
             }
 
-            System.out.println(String.format("Got message: %s", clientMessage));
 
+            if(clientMessage == null)
+            	continue;
+            	
             switch (clientMessage.split(ClientConfig.messageDivider)[0]) {
                 case ClientConfig.CsendMeNewSongString:
 
@@ -73,7 +74,8 @@ class StreamingConnectionUDP extends Thread {
                     break;
                 case ClientConfig.CsendByeString:
                     isRunning = false;
-                    sendAudioThread.close();
+                    if(sendAudioThread != null)
+                    	sendAudioThread.close();
                     break;
             }
         }

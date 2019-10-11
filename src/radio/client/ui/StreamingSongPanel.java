@@ -11,7 +11,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -40,15 +39,14 @@ public class StreamingSongPanel extends JPanel
 	private static Color textColor = new Color(249,211,66);
 	private static Color backgroundColor = new Color(41, 40, 38);
 
-	private static SongPanelColors spc = new SongPanelColors(textColor, textColor, textColor, backgroundColor);
-	private static MediaPanelColors mpc = new MediaPanelColors(backgroundColor, textColor, textColor);
+	public static SongPanelColors spc = new SongPanelColors(textColor, textColor, textColor, backgroundColor);
+	public static MediaPanelColors mpc = new MediaPanelColors(backgroundColor, textColor, textColor);
 
 	private SongDescriptors songDesc;
 	private SongPanelColors songPanelColors = spc;
 	private JLabel songNameLabel;
 	private JLabel albumNameLabel;
 	private JLabel artistNameLabel;
-	private BufferedImage backgroundImage;
 
 	private String[] categories;
 
@@ -200,56 +198,5 @@ public class StreamingSongPanel extends JPanel
 
 	public void setLabelsColors(SongPanelColors labelsColors) {
 		this.songPanelColors = labelsColors;
-	}
-
-	/**
-	 * Used after changing song / update song data
-	 */
-	private MediaPanelColors updateSongData()
-	{
-		//		SongPanelColors spc = null;
-		//		MediaPanelColors mpc = null;
-		//		
-
-		//		try {
-		//			spc = ImageProcessor.getSongPanelColors(song.getSongImage());
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
-
-
-
-		//		try {
-		//			mpc = ImageProcessor.getMediaPanelColors(song.getSongImage());
-		//		} catch (IOException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		}
-
-		//		songNameLabel.setText(songDesc.getSongName());
-		//		songNameLabel.setForeground(spc.getSongColor());
-		//
-		//		albumNameLabel.setText(songDesc.getAlbumName());
-		//		albumNameLabel.setForeground(spc.getAlbumColor());
-		//
-		//		artistNameLabel.setText(songDesc.getArtistName());
-		//		artistNameLabel.setForeground(spc.getArtistColor());
-
-		songPanelColors = spc;
-
-		//Processing the image for the background
-//		try {
-//			backgroundImage = ImageProcessor.processImage(songDesc.getSongImage());
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
-		this.repaint();
-
-		return mpc;
-		//		this.setVisible(false);
-		//		this.setVisible(true);
-
 	}
 }

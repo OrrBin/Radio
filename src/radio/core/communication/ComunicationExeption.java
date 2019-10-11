@@ -1,4 +1,4 @@
-package radio.communication;
+package radio.core.communication;
 
 public class ComunicationExeption extends Exception
 {

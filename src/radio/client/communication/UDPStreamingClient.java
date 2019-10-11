@@ -1,12 +1,9 @@
 package radio.client.communication;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,7 +14,6 @@ import java.nio.ByteOrder;
 
 import javax.naming.CommunicationException;
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.SourceDataLine;
 
 import radio.client.ClientConfig;
 import radio.client.audio.PlayerPropetrties;
@@ -46,17 +42,11 @@ public class UDPStreamingClient {
 		output = new DataOutputStream(clientSocket.getOutputStream());
 	}
 
-	public PlayerPropetrties getSongDetailsAndData(String category) throws IOException {
+	public PlayerPropetrties getSongDetailsAndData() throws IOException {
 
 		PlayerPropetrties playerPropetrties = null;
 		InputStream is = null;
-		FileOutputStream songFos = null;
-		FileOutputStream imageFos = null;
-		BufferedOutputStream songBos = null;
-		BufferedOutputStream imageBos = null;
-		ByteArrayOutputStream baos = null;
         long duration;
-		SourceDataLine line;
 		AudioFormat format;
 
 		// Ask for a new Song
@@ -77,7 +67,6 @@ public class UDPStreamingClient {
 		try {
 			is = clientSocket.getInputStream();
 			bufferSize = clientSocket.getReceiveBufferSize();
-			byte[] bytes = new byte[bufferSize];
 
 			bis = new BufferedInputStream(is);
 
@@ -160,7 +149,7 @@ public class UDPStreamingClient {
 			format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
 
 			playerPropetrties = new PlayerPropetrties(clientSocket, bis, format, bufferSize, fileSize,
-					new SongDescriptors(songName, albumName, artistName, category, duration));
+					new SongDescriptors(songName, albumName, artistName, duration));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -183,8 +172,7 @@ public class UDPStreamingClient {
 		try {
 			output.writeBytes(Util.clientMessage(ClientConfig.CsendByeString));
 		} catch (IOException e) {
-			System.out.println(this.getClass() + " Can't close");
-			e.printStackTrace();
+			System.out.println(this.getClass() + " Can't send disconnection message because socket already closed");
 		}
 		finally {
 			if (output != null)

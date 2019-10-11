@@ -7,16 +7,14 @@ public class SongDescriptors
 	private String songName;
 	private String albumName;
 	private String artistName;
-	private String genere;
 	private File songImage;
 	private long duration;
 	
-	public SongDescriptors(String songName, String albumName, String artistName, String genere, long duration)
+	public SongDescriptors(String songName, String albumName, String artistName, long duration)
 	{
 		this.setSongName(songName);
 		this.setAlbumName(albumName);
 		this.setArtistName(artistName);
-		this.setGenere(genere);
 		this.setSongImage(new File("RadioTit-server/images/"+songName));
 		this.duration = duration;
 	}
@@ -44,14 +42,6 @@ public class SongDescriptors
 
 	public void setArtistName(String artistName) {
 		this.artistName = artistName;
-	}
-
-	public String getGenere() {
-		return genere;
-	}
-
-	public void setGenere(String genere) {
-		this.genere = genere;
 	}
 
 	public long getDuration() {

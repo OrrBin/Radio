@@ -32,7 +32,7 @@ public class StreamingMainPageUDP extends JFrame
 	 */
 	private static final long serialVersionUID = 1L;
 
-	TitLineListener titLineListener;
+	SongEndLineListener titLineListener;
 	private UDPStreamingClient streamingClient;
 	PlayingThreadUDP player ;
 	ExecutorService executor;
@@ -62,9 +62,9 @@ public class StreamingMainPageUDP extends JFrame
 			}
 		});
 
-		PlayerPropetrties playerPropetrties = streamingClient.getSongDetailsAndData("led zepplin");
+		PlayerPropetrties playerPropetrties = streamingClient.getSongDetailsAndData();
 		streamingClient.getAdioData();
-		player = new PlayingThreadUDP(playerPropetrties, new TitLineListener());
+		player = new PlayingThreadUDP(playerPropetrties, new SongEndLineListener());
 
 		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongDescriptors())  ;
 		controlPanel = new ControlPanel(categories);
@@ -120,7 +120,7 @@ public class StreamingMainPageUDP extends JFrame
 		StreamingMainPageUDP mainPage = new StreamingMainPageUDP();
 	}	
 
-	public class TitLineListener implements LineListener
+	public class SongEndLineListener implements LineListener
 	{
 
 		@Override
@@ -140,9 +140,9 @@ public class StreamingMainPageUDP extends JFrame
 				PlayerPropetrties playerPropetrties = null;
 				try {
 					streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort);
-					playerPropetrties = streamingClient.getSongDetailsAndData("led zepplin");
+					playerPropetrties = streamingClient.getSongDetailsAndData();
 					streamingClient.getAdioData();
-					player = new PlayingThreadUDP(playerPropetrties, new TitLineListener());
+					player = new PlayingThreadUDP(playerPropetrties, new SongEndLineListener());
 				} catch (CommunicationException | IOException | LineUnavailableException e) {
 					e.printStackTrace();
 				}
