@@ -7,15 +7,15 @@ import java.awt.Rectangle;
 public class UIConfig 
 {
 	//Labels Fonts
-	private final static Font songNameFont = new Font("Arial", Font.PLAIN, 45);
-	private final static Font albumNameFont = new Font("Arial", Font.PLAIN, 40);
-	private final static Font artistNameFont = new Font("Arial", Font.PLAIN, 35);
-	private final static Font categoryFont = new Font("Arial", Font.PLAIN, 20);
+	final static Font songNameFont = new Font("Arial", Font.PLAIN, 45);
+	final static Font albumNameFont = new Font("Arial", Font.PLAIN, 40);
+	final static Font artistNameFont = new Font("Arial", Font.PLAIN, 35);
+	public final static Font categoryFont = new Font("Arial", Font.PLAIN, 20);
 	
 	//Sizes
 	public final static int frameWidth = 700;
-	private final static int frameHeight = 700;
-	private final static Dimension frameSize = new Dimension(frameWidth, frameHeight);
+	final static int frameHeight = 700;
+	final static Dimension frameSize = new Dimension(frameWidth, frameHeight);
 
 	//Images
 	public final static String defaultImage = "the_dude.png";
@@ -38,9 +38,5 @@ public class UIConfig
 	//How much to Darken
 	public final static double DARKEN_1_BY = 0.3;
 	public final static double DARKEN_2_BY = 0.5;
-
-	
-
-	
 
 }
