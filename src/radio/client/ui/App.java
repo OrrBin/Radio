@@ -20,11 +20,11 @@ import javax.swing.WindowConstants;
 
 import radio.client.audio.PlayerPropetrties;
 import radio.client.audio.PlayingThreadUDP;
-import radio.client.communication.UDPStreamingClient;
+import radio.client.communication.ServerConnector;
 import radio.client.objects.MediaPanelColors;
 import radio.server.ServerConfig;
 
-public class StreamingMainPageUDP extends JFrame
+public class App extends JFrame
 {
 	/**
 	 * 
@@ -32,7 +32,7 @@ public class StreamingMainPageUDP extends JFrame
 	private static final long serialVersionUID = 1L;
 
 	SongEndLineListener titLineListener;
-	private UDPStreamingClient streamingClient;
+	private ServerConnector streamingClient;
 	PlayingThreadUDP player ;
 	ExecutorService executor;
 
@@ -43,10 +43,10 @@ public class StreamingMainPageUDP extends JFrame
 	
 	private String[] categories;
 
-	public StreamingMainPageUDP() throws UnknownHostException, CommunicationException, IOException, LineUnavailableException 
+	public App() throws UnknownHostException, CommunicationException, IOException, LineUnavailableException
 	{
 //		tcpClient = new TCPClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
-		streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort);
+		streamingClient = new ServerConnector(ServerConfig.serverAddr, ServerConfig.serverPort);
 		executor = Executors.newFixedThreadPool(1);
 
 		this.addWindowListener(new WindowAdapter() {
@@ -116,7 +116,7 @@ public class StreamingMainPageUDP extends JFrame
 
 	public static void main(String[] args) throws IOException, CommunicationException, LineUnavailableException 
 	{
-		StreamingMainPageUDP mainPage = new StreamingMainPageUDP();
+		App mainPage = new App();
 	}	
 
 	public class SongEndLineListener implements LineListener
@@ -137,7 +137,7 @@ public class StreamingMainPageUDP extends JFrame
 				
 				PlayerPropetrties playerPropetrties = null;
 				try {
-					streamingClient = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort);
+					streamingClient = new ServerConnector(ServerConfig.serverAddr, ServerConfig.serverPort);
 					playerPropetrties = streamingClient.getSongDetailsAndData();
 					streamingClient.getAdioData();
 					player = new PlayingThreadUDP(playerPropetrties, new SongEndLineListener());
@@ -145,14 +145,14 @@ public class StreamingMainPageUDP extends JFrame
 					e.printStackTrace();
 				}
 				
-				StreamingMainPageUDP.this.getContentPane().removeAll();
+				App.this.getContentPane().removeAll();
 
 				
 				songPanel.setSong(player.getSongDescriptors());
 				
 				controlPanel.setPlayingThread(player);
 				
-				StreamingMainPageUDP.this.songPanel.setSong(playerPropetrties.getSongDescriptors());
+				App.this.songPanel.setSong(playerPropetrties.getSongDescriptors());
 				
 				controlPanel.setColors(mpc);
 				player.waveForm.setColors(mpc);
@@ -175,11 +175,11 @@ public class StreamingMainPageUDP extends JFrame
 				waveFormGbc.gridy = 2;
 				
 
-				StreamingMainPageUDP.this.getContentPane().add(songPanel, songPanelGbc);
-				StreamingMainPageUDP.this.getContentPane().add(controlPanel, controlPanelGbc);
-				StreamingMainPageUDP.this.getContentPane().add(player.waveForm, waveFormGbc);
+				App.this.getContentPane().add(songPanel, songPanelGbc);
+				App.this.getContentPane().add(controlPanel, controlPanelGbc);
+				App.this.getContentPane().add(player.waveForm, waveFormGbc);
 				
-				StreamingMainPageUDP.this.getContentPane().repaint();
+				App.this.getContentPane().repaint();
 
 				
 				executor.submit(player);

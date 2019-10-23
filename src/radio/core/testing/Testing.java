@@ -18,19 +18,19 @@ import org.junit.Test;
 
 import radio.client.audio.PlayerPropetrties;
 import radio.client.audio.PlayingThreadUDP;
-import radio.client.communication.UDPStreamingClient;
+import radio.client.communication.ServerConnector;
 import radio.core.utilities.BytesUtil;
 import radio.server.ServerConfig;
 
 public class Testing {
 
-	private UDPStreamingClient client;
+	private ServerConnector client;
 	private DatagramSocket socket;
 	private PlayerPropetrties props;
 
 	@Before
 	public void init() throws IOException, CommunicationException {
-		client = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort);
+		client = new ServerConnector(ServerConfig.serverAddr, ServerConfig.serverPort);
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class Testing {
 		client.disconnect();
 		socket.close();
 
-		client = new UDPStreamingClient(ServerConfig.serverAddr, ServerConfig.serverPort);
+		client = new ServerConnector(ServerConfig.serverAddr, ServerConfig.serverPort);
 		props = client.getSongDetailsAndData();
 		player = new PlayingThreadUDP(props, null);
 		client.getAdioData();

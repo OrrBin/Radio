@@ -14,7 +14,7 @@ import radio.client.ClientConfig;
 import radio.core.utilities.BytesUtil;
 import radio.server.ServerConfig;
 
-class StreamingConnectionUDP extends Thread {
+class ClientHandler extends Thread {
 	File songFile;
 	DataInputStream input;
 	BufferedReader bfr;
@@ -26,7 +26,7 @@ class StreamingConnectionUDP extends Thread {
 	SendSongDetailsThreard sendDetailsThread;
 	boolean isRunning = true;
 
-	public StreamingConnectionUDP(Socket aClientSocket) {
+	public ClientHandler(Socket aClientSocket) {
 		try {
 			clientSocket = aClientSocket;
 			address = aClientSocket.getInetAddress();

@@ -24,7 +24,7 @@ import radio.server.ServerConfig;
  *  
  *
  */
-public class UDPStreamingClient {
+public class ServerConnector {
 
 	Socket clientSocket;
 	DataOutputStream output;
@@ -34,7 +34,7 @@ public class UDPStreamingClient {
 	InputStreamReader inFromServer;
 	BufferedReader stringInFromServer;
 
-	public UDPStreamingClient(String server, int port)
+	public ServerConnector(String server, int port)
 			throws UnknownHostException, IOException, CommunicationException {
 		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
 		output = new DataOutputStream(clientSocket.getOutputStream());

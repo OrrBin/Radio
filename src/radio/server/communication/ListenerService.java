@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import radio.server.ServerConfig;
 
-public class UDPStreamingServer extends Thread {
+public class ListenerService extends Thread {
 
-	static HashMap<InetAddress, StreamingConnectionUDP> clients = new HashMap<>();
+	static HashMap<InetAddress, ClientHandler> clients = new HashMap<>();
 	
 	public static void main (String args[])
 	{
@@ -24,7 +23,7 @@ public class UDPStreamingServer extends Thread {
 			while(true) {   
 				Socket clientSocket = listenSocket.accept(); 
 				InetAddress address = listenSocket.getInetAddress();
-				clients.put(address, new StreamingConnectionUDP(clientSocket));
+				clients.put(address, new ClientHandler(clientSocket));
 			}   
 		}   
 		catch(IOException e) {  
