@@ -22,7 +22,6 @@ import radio.client.audio.PlayerPropetrties;
 import radio.client.audio.PlayingThreadUDP;
 import radio.client.communication.UDPStreamingClient;
 import radio.client.objects.MediaPanelColors;
-import radio.core.configuration.UIConfig;
 import radio.server.ServerConfig;
 
 public class StreamingMainPageUDP extends JFrame

@@ -4,7 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import radio.client.ClientConfig;
-import radio.core.utilities.Util;
+import radio.core.utilities.BytesUtil;
 
 public class GetAudioDataThread extends Thread {
 
@@ -27,7 +27,7 @@ public class GetAudioDataThread extends Thread {
 	public void getAudioData() throws IOException {
 		// Ask for a new Song
 		try {
-			output.writeBytes(Util.clientMessage(ClientConfig.CsendMeAudioData ));
+			output.writeBytes(BytesUtil.clientMessage(ClientConfig.CsendMeAudioData ));
 		} catch (IOException e) {
 			System.out.println(this.getClass() + " Can't ask for a song");
 			e.printStackTrace();

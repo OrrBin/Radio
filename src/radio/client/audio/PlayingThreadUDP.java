@@ -14,7 +14,7 @@ import javax.sound.sampled.*;
 import radio.client.ClientConfig;
 import radio.client.ui.WaveFormPanel;
 import radio.core.audio.SongDescriptors;
-import radio.core.configuration.UIConfig;
+import radio.client.ui.UIConfig;
 import radio.server.ServerConfig;
 import radio.server.WriteToLineThread;
 

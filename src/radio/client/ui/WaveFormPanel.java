@@ -13,7 +13,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.swing.JPanel;
 
 import radio.client.objects.MediaPanelColors;
-import radio.core.configuration.UIConfig;
 
 public class WaveFormPanel extends JPanel 
 {

@@ -19,7 +19,7 @@ import org.junit.Test;
 import radio.client.audio.PlayerPropetrties;
 import radio.client.audio.PlayingThreadUDP;
 import radio.client.communication.UDPStreamingClient;
-import radio.core.utilities.Util;
+import radio.core.utilities.BytesUtil;
 import radio.server.ServerConfig;
 
 public class Testing {
@@ -76,7 +76,6 @@ public class Testing {
 	public void checkIfplaying() throws IOException, LineUnavailableException, InterruptedException {
 		props = client.getSongDetailsAndData();
 		PlayingThreadUDP player = new PlayingThreadUDP(props, null);
-		client.getAdioData();
 
 		ExecutorService executor = Executors.newFixedThreadPool(1);
 		executor.submit(player);
@@ -165,7 +164,7 @@ public class Testing {
 	 */
 	@Test
 	public void checkRandomSongFile() {
-		File songFile = Util.chooseRandomSong(ServerConfig.baseFolder);
+		File songFile = BytesUtil.chooseRandomSong(ServerConfig.baseFolder);
 		assertNotNull(songFile);
 
 	}

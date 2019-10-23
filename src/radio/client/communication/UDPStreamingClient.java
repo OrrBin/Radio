@@ -11,14 +11,12 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
 import javax.naming.CommunicationException;
 import javax.sound.sampled.AudioFormat;
-
 import radio.client.ClientConfig;
 import radio.client.audio.PlayerPropetrties;
 import radio.core.audio.SongDescriptors;
-import radio.core.utilities.Util;
+import radio.core.utilities.BytesUtil;
 import radio.server.ServerConfig;
 
 /**
@@ -51,7 +49,7 @@ public class UDPStreamingClient {
 
 		// Ask for a new Song
 		try {
-			output.writeBytes(Util.clientMessage(ClientConfig.CsendMeNewSongString));
+			output.writeBytes(BytesUtil.clientMessage(ClientConfig.CsendMeNewSongString));
 		} catch (IOException e) {
 			System.out.println(this.getClass() + " Can't ask for a song");
 			e.printStackTrace();
@@ -78,73 +76,73 @@ public class UDPStreamingClient {
 			/************* Reading song properties headers *************/
 			// Read song name size header (int - 32 bit / 4 bytes)
 			count += bis.read(sizeBytes, count, ServerConfig.SONG_NAME_SIZE_HEADER_SIZE);
-			headerSize = Util.byteArrayToLeInt(sizeBytes);
+			headerSize = BytesUtil.byteArrayToLeInt(sizeBytes);
 			headerBytes = new byte[headerSize];
 			sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
 
 			
 			// Read song name header
 			count += bis.read(headerBytes, 0, headerSize);
-			songName = Util.byteArrayToString(headerBytes);
+			songName = BytesUtil.byteArrayToString(headerBytes);
 			headerBytes = null;
 
 			// Read album name size header (int - 32 bit / 4 bytes)
 			count += bis.read(sizeBytes, 0, ServerConfig.ALBUM_NAME_SIZE_HEADER_SIZE);
-			headerSize = Util.byteArrayToLeInt(sizeBytes);
+			headerSize = BytesUtil.byteArrayToLeInt(sizeBytes);
 			headerBytes = new byte[headerSize];
 			sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
 
 			// Read album name header
 			count += bis.read(headerBytes, 0, headerSize);
-			albumName = Util.byteArrayToString(headerBytes);
+			albumName = BytesUtil.byteArrayToString(headerBytes);
 			headerBytes = null;
 
 			// Read artist name size header (int - 32 bit / 4 bytes)
 			count += bis.read(sizeBytes, 0, ServerConfig.ARTIST_NAME_SIZE_HEADER_SIZE);
-			headerSize = Util.byteArrayToLeInt(sizeBytes);
+			headerSize = BytesUtil.byteArrayToLeInt(sizeBytes);
 			headerBytes = new byte[headerSize];
 			sizeBytes = new byte[ServerConfig.NUMBER_HEADER_SIZE];
 
 			// Read artist name header
 			count += bis.read(headerBytes, 0, headerSize);
-			artistName = Util.byteArrayToString(headerBytes);
+			artistName = BytesUtil.byteArrayToString(headerBytes);
 			headerBytes = null;
 
 			/*************** Reading song file properties headers *****************/
 			// Read song file size in bytes
 			headerBytes = new byte[ServerConfig.FILE_SIZE_HEADER_SIZE];
 			count += bis.read(headerBytes, 0, ServerConfig.FILE_SIZE_HEADER_SIZE);
-			fileSize = Util.byteArrayToLong(headerBytes);
+			fileSize = BytesUtil.byteArrayToLong(headerBytes);
 
 			/************* Reading AudioFormat properties headers *************/
 			// Read sample rate header (float - 32 bit / 4 bytes )
 			headerBytes = new byte[ServerConfig.SAMPLE_RATE_HEADER_SIZE];
 			count += bis.read(headerBytes, 0, ServerConfig.SAMPLE_RATE_HEADER_SIZE);
-			sampleRate = Util.byteArrayToFloat(headerBytes);
+			sampleRate = BytesUtil.byteArrayToFloat(headerBytes);
 
 			// Read sample size in bits header (int - 32 bit / 4 bytes)
 			headerBytes = new byte[ServerConfig.SAMPLE_SIZE_IN_BITS_HEADER_SIZE];
 			count += bis.read(headerBytes, 0, ServerConfig.SAMPLE_SIZE_IN_BITS_HEADER_SIZE);
-			sampleSizeInBits = Util.byteArrayToLeInt(headerBytes);
+			sampleSizeInBits = BytesUtil.byteArrayToLeInt(headerBytes);
 
 			// Read channels header (int - 32 bit / 4 bytes)
 			headerBytes = new byte[ServerConfig.CHANNELS_HEADER_SIZE];
 			count += bis.read(headerBytes, 0, ServerConfig.CHANNELS_HEADER_SIZE);
-			channels = Util.byteArrayToLeInt(headerBytes);
+			channels = BytesUtil.byteArrayToLeInt(headerBytes);
 
 			// Read signed header (boolean - 1 byte)
 			headerBytes = new byte[ServerConfig.SIGNED_HEADER_SIZE];
 			count += bis.read(headerBytes, 0, ServerConfig.SIGNED_HEADER_SIZE);
-			signed = Util.byteArrayToBoolean(headerBytes);
+			signed = BytesUtil.byteArrayToBoolean(headerBytes);
 
             // Read BigEndian header (boolean - 1 byte)
             headerBytes = new byte[ServerConfig.BIGENDIAN_HEADER_SIZE];
             count += bis.read(headerBytes, 0, ServerConfig.BIGENDIAN_HEADER_SIZE);
-            bigEndian = Util.byteArrayToBoolean(headerBytes);
+            bigEndian = BytesUtil.byteArrayToBoolean(headerBytes);
 
             headerBytes = new byte[ServerConfig.LONG_HEADER_SIZE];
             count += bis.read(headerBytes, 0, ServerConfig.LONG_HEADER_SIZE);
-            duration = Util.byteArrayToLong(headerBytes);
+            duration = BytesUtil.byteArrayToLong(headerBytes);
 
 			format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
 
@@ -170,7 +168,7 @@ public class UDPStreamingClient {
 	public void disconnect() throws IOException
 	{
 		try {
-			output.writeBytes(Util.clientMessage(ClientConfig.CsendByeString));
+			output.writeBytes(BytesUtil.clientMessage(ClientConfig.CsendByeString));
 		} catch (IOException e) {
 			System.out.println(this.getClass() + " Can't send disconnection message because socket already closed");
 		}

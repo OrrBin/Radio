@@ -10,7 +10,6 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -21,7 +20,6 @@ import radio.client.fonts.FontProcessor;
 import radio.client.objects.MediaPanelColors;
 import radio.client.objects.SongPanelColors;
 import radio.core.audio.SongDescriptors;
-import radio.core.configuration.UIConfig;
 
 /**
  * 

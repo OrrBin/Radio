@@ -8,7 +8,7 @@ import java.net.Socket;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import radio.core.audio.songData;
-import radio.core.utilities.Util;
+import radio.core.utilities.BytesUtil;
 
 public class SendSongDetailsThreard extends Thread {
 
@@ -51,22 +51,22 @@ public class SendSongDetailsThreard extends Thread {
 
 		/*************** Send song file properties headers *****************/
 		// Send song file size in bytes
-		out.write(Util.LongToByteArray(song.getFileSize()));
+		out.write(BytesUtil.LongToByteArray(song.getFileSize()));
 
 		/*************** Send AudioFormat properties headers *****************/
-		out.write(Util.FloatToByteArray(song.getSampleRate()));
-		out.write(Util.leIntToByteArray(song.getSampleSizeInBits()));
-		out.write(Util.leIntToByteArray(song.getChannels()));
-		out.write(Util.booleanToByteArray(song.isSigned()));
-		out.write(Util.booleanToByteArray(song.isBigEndian()));
-		out.write(Util.longToByteArray(song.getDurationInMili()));
+		out.write(BytesUtil.FloatToByteArray(song.getSampleRate()));
+		out.write(BytesUtil.leIntToByteArray(song.getSampleSizeInBits()));
+		out.write(BytesUtil.leIntToByteArray(song.getChannels()));
+		out.write(BytesUtil.booleanToByteArray(song.isSigned()));
+		out.write(BytesUtil.booleanToByteArray(song.isBigEndian()));
+		out.write(BytesUtil.longToByteArray(song.getDurationInMili()));
 	}
 
 	// will return a string and its size to send
 	public void sendWithSize(String str, BufferedOutputStream out) {
 		try {
-			out.write(Util.getStringSizeInBytes(str));
-			out.write(Util.StringToByteArray(str));
+			out.write(BytesUtil.getStringSizeInBytes(str));
+			out.write(BytesUtil.StringToByteArray(str));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

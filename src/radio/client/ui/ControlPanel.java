@@ -8,7 +8,7 @@ import javax.swing.*;
 
 import radio.client.audio.PlayingThreadUDP;
 import radio.client.objects.MediaPanelColors;
-import radio.core.utilities.Util;
+import radio.core.utilities.TimeUtilities;
 
 public class ControlPanel extends JPanel 
 {
@@ -69,7 +69,7 @@ public class ControlPanel extends JPanel
 			progress.setBackground(new Color(99999));
 			progress.setValue(audioPosition);
 			// TODO - it feels like the clock is moving too fast
-			timeLabel.setText(Util.convertSecondsToStringTime(audioPosition/1000));
+			timeLabel.setText(TimeUtilities.convertSecondsToStringTime(audioPosition/1000));
 		}
 		repaint();
 	}

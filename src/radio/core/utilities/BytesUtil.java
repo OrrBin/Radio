@@ -10,7 +10,8 @@ import java.util.TimeZone;
 import radio.client.ClientConfig;
 import radio.server.ServerConfig;
 
-public class Util
+// Making types to byte arrays for sending or the opposite way
+public class BytesUtil
 {
 	/**
 	 * returns byte array with {ServerConfig.NUMBER_HEADER_SIZE} cells,
@@ -145,38 +146,9 @@ public class Util
 		return new String(b, Charset.forName(ServerConfig.DEFAULT_CHARSET_NAME));
 	}
 
-	public static String convertSecondsToStringTime(int totalSeconds)
-	{
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(0);
-		cal.setTimeZone(TimeZone.getTimeZone("GMT+0"));
-		
-		cal.add(Calendar.SECOND, totalSeconds);
-		
-		int hours = cal.get(Calendar.HOUR);
-		int minutes = cal.get(Calendar.MINUTE);
-		int seconds = cal.get(Calendar.SECOND);
-		StringBuffer sb = new StringBuffer();
 
-		if(hours > 0)
-		{
-			if (hours < 10)
-				sb.append("0");
-			sb.append(String.valueOf(hours)).append(":");
-		}
 
-		if(minutes < 10)
-			sb.append("0");
-		sb.append(String.valueOf(minutes)).append(":");
 
-		if(seconds < 10)
-			sb.append("0");
-		sb.append(String.valueOf(seconds));
-
-		return sb.toString();
-
-	}
-	
 	public static String clientMessage(String... parts) {
 		return String.join(ClientConfig.messageDivider, parts).concat("\n");
 	}

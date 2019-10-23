@@ -11,7 +11,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import radio.client.ClientConfig;
-import radio.core.utilities.Util;
+import radio.core.utilities.BytesUtil;
 import radio.server.ServerConfig;
 
 class StreamingConnectionUDP extends Thread {
@@ -57,7 +57,7 @@ class StreamingConnectionUDP extends Thread {
 
 			switch (clientMessage.split(ClientConfig.messageDivider)[0]) {
 			case ClientConfig.CsendMeNewSongString:
-				songFile = Util.chooseRandomSong(ServerConfig.baseFolder);
+				songFile = BytesUtil.chooseRandomSong(ServerConfig.baseFolder);
 				sendDetailsThread = new SendSongDetailsThreard(clientSocket, songFile);
 				sendDetailsThread.start();
 				break;

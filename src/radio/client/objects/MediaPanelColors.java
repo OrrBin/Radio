@@ -2,7 +2,7 @@ package radio.client.objects;
 
 import java.awt.Color;
 
-import radio.core.configuration.UIConfig;
+import radio.client.ui.UIConfig;
 
 public class MediaPanelColors
 {
