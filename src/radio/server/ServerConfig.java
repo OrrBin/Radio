@@ -7,22 +7,11 @@ package radio.server;
  */
 public class ServerConfig
 {
-	//Folders
-	public static final String baseFolder = "RadioTit-server\\music\\";
-	public static final String musicFolder = baseFolder + "\\music";
-	public static final String imagesFolder = baseFolder + "\\images";
-
-	//Server side requests (Strings)
-	public static final String SHiThereString = "hi";
-
-	//Server side requests (bytes)
-	public static final Byte CsendHiThere = new Byte(SHiThereString);
-	
-	//Size of the header that holds the file name length in bytes
-	public static final int fileSizeHeader = Integer.SIZE / Byte.SIZE;
-
 	//Server port number
-	public static final int serverPort = 5801;
+	public static int LISTENING_PORT = 5801;
+	
+	//Folders
+	public static String MUSIC_FOLDER = "RadioTit-server\\music\\";
 
 	//Server IP
 	public static final String serverAddr = "localhost"; //TODO : change it!

@@ -18,8 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import radio.client.ClientConfig;
 import radio.client.audio.PlayerPropetrties;
-import radio.client.audio.PlayingThreadUDP;
+import radio.client.audio.UDP_PORT;
 import radio.client.communication.ServerConnector;
 import radio.client.objects.MediaPanelColors;
 import radio.server.ServerConfig;
@@ -31,9 +32,10 @@ public class App extends JFrame
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
 	SongEndLineListener titLineListener;
 	private ServerConnector streamingClient;
-	PlayingThreadUDP player ;
+	UDP_PORT player ;
 	ExecutorService executor;
 
 	private StreamingSongPanel songPanel;
@@ -46,7 +48,7 @@ public class App extends JFrame
 	public App() throws UnknownHostException, CommunicationException, IOException, LineUnavailableException
 	{
 //		tcpClient = new TCPClient(ServerConfig.serverAddr, ServerConfig.serverPort, dataManager.getClientBaseFolder());
-		streamingClient = new ServerConnector(ServerConfig.serverAddr, ServerConfig.serverPort);
+		streamingClient = new ServerConnector(ClientConfig.SERVER_URL, ClientConfig.SERVER_PORT);
 		executor = Executors.newFixedThreadPool(1);
 
 		this.addWindowListener(new WindowAdapter() {
@@ -63,7 +65,7 @@ public class App extends JFrame
 
 		PlayerPropetrties playerPropetrties = streamingClient.getSongDetailsAndData();
 		streamingClient.getAdioData();
-		player = new PlayingThreadUDP(playerPropetrties, new SongEndLineListener());
+		player = new UDP_PORT(playerPropetrties, new SongEndLineListener());
 
 		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongDescriptors())  ;
 		controlPanel = new ControlPanel(categories);
@@ -116,7 +118,18 @@ public class App extends JFrame
 
 	public static void main(String[] args) throws IOException, CommunicationException, LineUnavailableException 
 	{
-		App mainPage = new App();
+		if(args.length >= 2) {
+			ClientConfig.SERVER_URL = args[0];
+			
+			try {
+				ClientConfig.SERVER_PORT = Integer.valueOf(args[1]);
+			} catch(NumberFormatException e) {
+				System.out.println("optinal parameters : SERVER_URL (string) SERVER_PORT (integer)");
+				System.out.println("Wrong format for parameter PORT - expected number");
+				return;
+			}
+		}
+		new App();
 	}	
 
 	public class SongEndLineListener implements LineListener
@@ -137,10 +150,10 @@ public class App extends JFrame
 				
 				PlayerPropetrties playerPropetrties = null;
 				try {
-					streamingClient = new ServerConnector(ServerConfig.serverAddr, ServerConfig.serverPort);
+					streamingClient = new ServerConnector(ClientConfig.SERVER_URL, ClientConfig.SERVER_PORT);
 					playerPropetrties = streamingClient.getSongDetailsAndData();
 					streamingClient.getAdioData();
-					player = new PlayingThreadUDP(playerPropetrties, new SongEndLineListener());
+					player = new UDP_PORT(playerPropetrties, new SongEndLineListener());
 				} catch (CommunicationException | IOException | LineUnavailableException e) {
 					e.printStackTrace();
 				}

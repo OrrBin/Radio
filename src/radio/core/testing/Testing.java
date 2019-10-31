@@ -16,9 +16,11 @@ import javax.sound.sampled.LineUnavailableException;
 import org.junit.Before;
 import org.junit.Test;
 
+import radio.client.ClientConfig;
 import radio.client.audio.PlayerPropetrties;
-import radio.client.audio.PlayingThreadUDP;
+import radio.client.audio.UDP_PORT;
 import radio.client.communication.ServerConnector;
+import radio.client.ui.App;
 import radio.core.utilities.BytesUtil;
 import radio.server.ServerConfig;
 
@@ -30,7 +32,7 @@ public class Testing {
 
 	@Before
 	public void init() throws IOException, CommunicationException {
-		client = new ServerConnector(ServerConfig.serverAddr, ServerConfig.serverPort);
+		client = new ServerConnector(ClientConfig.SERVER_URL, ClientConfig.SERVER_PORT);
 	}
 
 	/**
@@ -52,7 +54,7 @@ public class Testing {
 	@Test
 	public void checkDataIsStreaming() throws IOException, LineUnavailableException, InterruptedException {
 		props = client.getSongDetailsAndData();
-		PlayingThreadUDP player = new PlayingThreadUDP(props, null);
+		UDP_PORT player = new UDP_PORT(props, null);
 		client.getAdioData();
 		socket = player.getSocket();
 		byte[] buf = new byte[ServerConfig.DATAGRAM_PACKET_SIZE];
@@ -75,7 +77,7 @@ public class Testing {
 	@Test
 	public void checkIfplaying() throws IOException, LineUnavailableException, InterruptedException {
 		props = client.getSongDetailsAndData();
-		PlayingThreadUDP player = new PlayingThreadUDP(props, null);
+		UDP_PORT player = new UDP_PORT(props, null);
 
 		ExecutorService executor = Executors.newFixedThreadPool(1);
 		executor.submit(player);
@@ -96,7 +98,7 @@ public class Testing {
 	@Test
 	public void checkPause() throws IOException, LineUnavailableException, InterruptedException {
 		props = client.getSongDetailsAndData();
-		PlayingThreadUDP player = new PlayingThreadUDP(props, null);
+		UDP_PORT player = new UDP_PORT(props, null);
 		client.getAdioData();
 
 		ExecutorService executor = Executors.newFixedThreadPool(1);
@@ -127,7 +129,7 @@ public class Testing {
 	public void checkChangeSong()
 			throws IOException, LineUnavailableException, InterruptedException, CommunicationException {
 		props = client.getSongDetailsAndData();
-		PlayingThreadUDP player = new PlayingThreadUDP(props, null);
+		UDP_PORT player = new UDP_PORT(props, null);
 		client.getAdioData();
 		socket = player.getSocket();
 		byte[] buf = new byte[ServerConfig.DATAGRAM_PACKET_SIZE];
@@ -143,9 +145,9 @@ public class Testing {
 		client.disconnect();
 		socket.close();
 
-		client = new ServerConnector(ServerConfig.serverAddr, ServerConfig.serverPort);
+		client = new ServerConnector(ClientConfig.SERVER_URL, ClientConfig.SERVER_PORT);
 		props = client.getSongDetailsAndData();
-		player = new PlayingThreadUDP(props, null);
+		player = new UDP_PORT(props, null);
 		client.getAdioData();
 		socket = player.getSocket();
 		idx = 0;
@@ -164,7 +166,7 @@ public class Testing {
 	 */
 	@Test
 	public void checkRandomSongFile() {
-		File songFile = BytesUtil.chooseRandomSong(ServerConfig.baseFolder);
+		File songFile = BytesUtil.chooseRandomSong(ServerConfig.MUSIC_FOLDER);
 		assertNotNull(songFile);
 
 	}

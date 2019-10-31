@@ -15,6 +15,7 @@ import javax.naming.CommunicationException;
 import javax.sound.sampled.AudioFormat;
 import radio.client.ClientConfig;
 import radio.client.audio.PlayerPropetrties;
+import radio.client.ui.App;
 import radio.core.audio.SongDescriptors;
 import radio.core.utilities.BytesUtil;
 import radio.server.ServerConfig;
@@ -36,7 +37,7 @@ public class ServerConnector {
 
 	public ServerConnector(String server, int port)
 			throws UnknownHostException, IOException, CommunicationException {
-		clientSocket = new Socket(ServerConfig.serverAddr, ServerConfig.serverPort);
+		clientSocket = new Socket(ClientConfig.SERVER_URL, ClientConfig.SERVER_PORT);
 		output = new DataOutputStream(clientSocket.getOutputStream());
 	}
 

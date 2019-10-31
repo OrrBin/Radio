@@ -57,7 +57,7 @@ class ClientHandler extends Thread {
 
 			switch (clientMessage.split(ClientConfig.messageDivider)[0]) {
 			case ClientConfig.CsendMeNewSongString:
-				songFile = BytesUtil.chooseRandomSong(ServerConfig.baseFolder);
+				songFile = BytesUtil.chooseRandomSong(ServerConfig.MUSIC_FOLDER);
 				sendDetailsThread = new SendSongDetailsThreard(clientSocket, songFile);
 				sendDetailsThread.start();
 				break;
