@@ -1,4 +1,4 @@
-package radio.client.objects;
+package radio.client.ui.objects;
 
 import java.awt.Color;
 

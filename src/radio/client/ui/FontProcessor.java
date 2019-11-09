@@ -1,4 +1,4 @@
-package radio.client.fonts;
+package radio.client.ui;
 
 import java.awt.Color;
 import java.awt.Font;

@@ -20,10 +20,9 @@ import javax.swing.WindowConstants;
 
 import radio.client.ClientConfig;
 import radio.client.audio.PlayerPropetrties;
-import radio.client.audio.UDP_PORT;
+import radio.client.audio.PlayingThread;
 import radio.client.communication.ServerConnector;
-import radio.client.objects.MediaPanelColors;
-import radio.server.ServerConfig;
+import radio.client.ui.objects.MediaPanelColors;
 
 public class App extends JFrame
 {
@@ -35,7 +34,7 @@ public class App extends JFrame
 	
 	SongEndLineListener titLineListener;
 	private ServerConnector streamingClient;
-	UDP_PORT player ;
+	PlayingThread player ;
 	ExecutorService executor;
 
 	private StreamingSongPanel songPanel;
@@ -65,7 +64,7 @@ public class App extends JFrame
 
 		PlayerPropetrties playerPropetrties = streamingClient.getSongDetailsAndData();
 		streamingClient.getAdioData();
-		player = new UDP_PORT(playerPropetrties, new SongEndLineListener());
+		player = new PlayingThread(playerPropetrties, new SongEndLineListener());
 
 		songPanel = new StreamingSongPanel(new String[] {"Shuffle"},player.getSongDescriptors())  ;
 		controlPanel = new ControlPanel(categories);
@@ -153,7 +152,7 @@ public class App extends JFrame
 					streamingClient = new ServerConnector(ClientConfig.SERVER_URL, ClientConfig.SERVER_PORT);
 					playerPropetrties = streamingClient.getSongDetailsAndData();
 					streamingClient.getAdioData();
-					player = new UDP_PORT(playerPropetrties, new SongEndLineListener());
+					player = new PlayingThread(playerPropetrties, new SongEndLineListener());
 				} catch (CommunicationException | IOException | LineUnavailableException e) {
 					e.printStackTrace();
 				}

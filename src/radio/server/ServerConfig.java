@@ -2,20 +2,17 @@ package radio.server;
 
 /**
  * Server Side Co
- *  
+ *
  *
  */
 public class ServerConfig
 {
 	//Server port number
 	public static int LISTENING_PORT = 5801;
-	
-	//Folders
-	public static String MUSIC_FOLDER = "RadioTit-server\\music\\";
 
-	//Server IP
-	public static final String serverAddr = "localhost"; //TODO : change it!
-	
+	//Folders
+	public static String MUSIC_FOLDER = ".\\music\\";
+
 	public static final int DATAGRAM_PACKET_SIZE = 4096;
 	
 	public static final int NUMBER_HEADER_SIZE = 4;
@@ -26,10 +23,7 @@ public class ServerConfig
 	public static final int SONG_NAME_SIZE_HEADER_SIZE = NUMBER_HEADER_SIZE;
 	public static final int ALBUM_NAME_SIZE_HEADER_SIZE = NUMBER_HEADER_SIZE;
 	public static final int ARTIST_NAME_SIZE_HEADER_SIZE = NUMBER_HEADER_SIZE;
-	
-//	public static final int SONG_NAME_HEADER_SIZE = STRING_HEADER_SIZE;
-//	public static final int ALBUM_NAME_HEADER_SIZE = STRING_HEADER_SIZE;
-//	public static final int ARTIST_NAME_HEADER_SIZE = STRING_HEADER_SIZE;
+
 	
 	public static final int FILE_SIZE_HEADER_SIZE = LONG_NUMBER_HEADER_SIZE;
 	
@@ -38,7 +32,7 @@ public class ServerConfig
 	public static final int CHANNELS_HEADER_SIZE = NUMBER_HEADER_SIZE;
 	public static final int SIGNED_HEADER_SIZE = BOOLEAN_HEADER_SIZE;
 	public static final int BIGENDIAN_HEADER_SIZE = BOOLEAN_HEADER_SIZE;
-	public static final int DURATION_HEADER_SIZE = LONG_HEADER_SIZE;
+
 
 	public static final String DEFAULT_CHARSET_NAME = "UTF-8";
 }

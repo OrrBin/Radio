@@ -1,4 +1,4 @@
-package radio.server;
+package radio.client;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.SourceDataLine;

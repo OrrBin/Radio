@@ -18,9 +18,8 @@ import org.junit.Test;
 
 import radio.client.ClientConfig;
 import radio.client.audio.PlayerPropetrties;
-import radio.client.audio.UDP_PORT;
+import radio.client.audio.PlayingThread;
 import radio.client.communication.ServerConnector;
-import radio.client.ui.App;
 import radio.core.utilities.BytesUtil;
 import radio.server.ServerConfig;
 
@@ -54,7 +53,7 @@ public class Testing {
 	@Test
 	public void checkDataIsStreaming() throws IOException, LineUnavailableException, InterruptedException {
 		props = client.getSongDetailsAndData();
-		UDP_PORT player = new UDP_PORT(props, null);
+		PlayingThread player = new PlayingThread(props, null);
 		client.getAdioData();
 		socket = player.getSocket();
 		byte[] buf = new byte[ServerConfig.DATAGRAM_PACKET_SIZE];
@@ -77,7 +76,7 @@ public class Testing {
 	@Test
 	public void checkIfplaying() throws IOException, LineUnavailableException, InterruptedException {
 		props = client.getSongDetailsAndData();
-		UDP_PORT player = new UDP_PORT(props, null);
+		PlayingThread player = new PlayingThread(props, null);
 
 		ExecutorService executor = Executors.newFixedThreadPool(1);
 		executor.submit(player);
@@ -98,7 +97,7 @@ public class Testing {
 	@Test
 	public void checkPause() throws IOException, LineUnavailableException, InterruptedException {
 		props = client.getSongDetailsAndData();
-		UDP_PORT player = new UDP_PORT(props, null);
+		PlayingThread player = new PlayingThread(props, null);
 		client.getAdioData();
 
 		ExecutorService executor = Executors.newFixedThreadPool(1);
@@ -129,7 +128,7 @@ public class Testing {
 	public void checkChangeSong()
 			throws IOException, LineUnavailableException, InterruptedException, CommunicationException {
 		props = client.getSongDetailsAndData();
-		UDP_PORT player = new UDP_PORT(props, null);
+		PlayingThread player = new PlayingThread(props, null);
 		client.getAdioData();
 		socket = player.getSocket();
 		byte[] buf = new byte[ServerConfig.DATAGRAM_PACKET_SIZE];
@@ -147,7 +146,7 @@ public class Testing {
 
 		client = new ServerConnector(ClientConfig.SERVER_URL, ClientConfig.SERVER_PORT);
 		props = client.getSongDetailsAndData();
-		player = new UDP_PORT(props, null);
+		player = new PlayingThread(props, null);
 		client.getAdioData();
 		socket = player.getSocket();
 		idx = 0;

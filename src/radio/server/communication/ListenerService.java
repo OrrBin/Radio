@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import radio.server.ServerConfig;
 
-public class ListenerService extends Thread {
+	public class ListenerService extends Thread {
 
 	static HashMap<InetAddress, ClientHandler> clients = new HashMap<>();
 

@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import radio.client.audio.UDP_PORT;
-import radio.client.objects.MediaPanelColors;
+import radio.client.audio.PlayingThread;
+import radio.client.ui.objects.MediaPanelColors;
 import radio.core.utilities.TimeUtilities;
 
 public class ControlPanel extends JPanel 
@@ -17,7 +17,7 @@ public class ControlPanel extends JPanel
 	 * 
 	 */
 	private static final long serialVersionUID = -2742408715579486340L;
-	private UDP_PORT playingThread;
+	private PlayingThread playingThread;
 	private JButton play;
 	private JButton pause;
 	private JButton skip;
@@ -74,7 +74,7 @@ public class ControlPanel extends JPanel
 		repaint();
 	}
 
-	public void setPlayingThread(UDP_PORT thread)
+	public void setPlayingThread(PlayingThread thread)
 	{
 		//		if(this.playingThread != null)
 		//		{
@@ -156,7 +156,7 @@ public class ControlPanel extends JPanel
 		}
 	}
 
-	public UDP_PORT getPlayingThread() {
+	public PlayingThread getPlayingThread() {
 		return playingThread;
 
 	}

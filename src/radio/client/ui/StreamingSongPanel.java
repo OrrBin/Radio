@@ -16,9 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import radio.client.fonts.FontProcessor;
-import radio.client.objects.MediaPanelColors;
-import radio.client.objects.SongPanelColors;
+import radio.client.ui.objects.MediaPanelColors;
+import radio.client.ui.objects.SongPanelColors;
 import radio.core.audio.SongDescriptors;
 
 /**
