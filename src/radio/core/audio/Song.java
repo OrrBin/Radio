@@ -2,11 +2,6 @@ package radio.core.audio;
 
 import java.io.File;
 
-/**
- * 
- *  
- *
- */
 public abstract class Song 
 {
 	private String songName;
@@ -14,28 +9,25 @@ public abstract class Song
 	private String artistName;
 	private File songFile;
 	private File songImage;
-	private String genre;
 	
 	public Song(String songName, String albumName, String artistName,
-			String songFileName, String imageFileName, String genre)
+			String songFileName, String imageFileName)
 	{
 		this.songName = songName;
 		this.albumName = albumName;
 		this.artistName = artistName;
 		this.songFile = new File(songFileName);
 		this.songImage = new File(imageFileName);
-		this.setGenre(genre);
 	}
 	
 	public Song(String songName, String albumName, String artistName,
-			File songFile, File songImage, String genre)
+			File songFile, File songImage)
 	{
 		this.songName = songName;
 		this.albumName = albumName;
 		this.artistName = artistName;
 		this.songFile = songFile;
 		this.songImage = songImage;
-		this.setGenre(genre);
 	}
 	
 	public Song(String songName, String albumName, String artistName)
@@ -114,14 +106,5 @@ public abstract class Song
 	public void setSongImage(File songImage) {
 		this.songImage = songImage;
 	}
-
-	public String getGenre() {
-		return genre;
-	}
-
-	public void setGenre(String genre) {
-		this.genre = genre;
-	}
-	
 
 }
