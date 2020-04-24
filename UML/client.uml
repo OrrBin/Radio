@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>radio.client</OriginalElement>
+  <nodes>
+    <node x="231.00000000000003" y="158.0">radio.client.ui.objects.SongPanelColors</node>
+    <node x="580.2678571428571" y="346.0">radio.client.ui.ControlPanel.PauseActionListener</node>
+    <node x="169.3170426065164" y="0.0">radio.client.ui.objects.MediaPanelColors</node>
+    <node x="784.2678571428571" y="346.0">radio.client.ui.ControlPanel.PlayActionListener</node>
+    <node x="570.0444862155389" y="158.0">radio.client.audio.PlayingThread</node>
+    <node x="222.0" y="420.0">radio.client.audio.PlayerPropetrties</node>
+    <node x="802.0" y="420.0">radio.client.ui.UIConfig</node>
+    <node x="482.2753759398497" y="237.0">radio.client.ui.App.SongEndLineListener</node>
+    <node x="981.2678571428572" y="346.0">radio.client.ui.ControlPanel.SkipActionListener</node>
+    <node x="437.0" y="420.0">radio.client.ui.FontProcessor</node>
+    <node x="176.0" y="237.0">radio.client.ui.StreamingSongPanel</node>
+    <node x="0.0" y="237.0">radio.client.communication.ServerConnector</node>
+    <node x="623.0" y="420.0">radio.client.ClientConfig</node>
+    <node x="0.0" y="420.0">radio.client.communication.GetAudioDataThread</node>
+    <node x="714.2944862155389" y="237.0">radio.client.ui.ControlPanel</node>
+    <node x="657.7944862155389" y="79.0">radio.client.ui.WaveFormPanel</node>
+    <node x="353.98339598997507" y="346.0">radio.client.ui.App</node>
+    <node x="731.0444862155389" y="158.0">radio.client.WriteToLineThread</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="radio.client.ui.App" target="radio.client.ui.objects.MediaPanelColors">
+      <point x="-19.714285714285694" y="-14.5" />
+      <point x="368.7691102756894" y="316.0" />
+      <point x="165.5" y="316.0" />
+      <point x="165.5" y="54.0" />
+      <point x="196.48370927318308" y="54.0" />
+      <point x="-54.333333333333314" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.App" target="radio.client.ui.ControlPanel">
+      <point x="29.571428571428555" y="-14.5" />
+      <point x="418.0548245614036" y="316.0" />
+      <point x="731.0444862155389" y="316.0" />
+      <point x="-50.25" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.App" target="radio.client.ui.StreamingSongPanel">
+      <point x="-9.857142857142833" y="-14.5" />
+      <point x="378.6262531328323" y="306.0" />
+      <point x="264.5" y="306.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.ControlPanel.SkipActionListener" target="radio.client.ui.ControlPanel">
+      <point x="0.0" y="-14.5" />
+      <point x="1069.7678571428573" y="316.0" />
+      <point x="831.5444862155389" y="316.0" />
+      <point x="50.25" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.App" target="radio.client.ui.App.SongEndLineListener">
+      <point x="9.857142857142861" y="-14.5" />
+      <point x="398.34053884711795" y="296.0" />
+      <point x="528.2753759398497" y="296.0" />
+      <point x="-46.0" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.ControlPanel.PauseActionListener" target="radio.client.ui.ControlPanel">
+      <point x="0.0" y="-14.5" />
+      <point x="672.2678571428571" y="326.0" />
+      <point x="764.5444862155389" y="326.0" />
+      <point x="-16.75" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.ControlPanel.PlayActionListener" target="radio.client.ui.ControlPanel">
+      <point x="0.0" y="-14.5" />
+      <point x="872.7678571428571" y="326.0" />
+      <point x="798.0444862155389" y="326.0" />
+      <point x="16.75" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.App" target="radio.client.audio.PlayingThread">
+      <point x="0.0" y="-14.5" />
+      <point x="388.48339598997507" y="286.0" />
+      <point x="402.25" y="286.0" />
+      <point x="402.25" y="212.0" />
+      <point x="605.2944862155389" y="212.0" />
+      <point x="-35.25" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.ControlPanel" target="radio.client.audio.PlayingThread">
+      <point x="0.0" y="-14.5" />
+      <point x="781.2944862155389" y="212.0" />
+      <point x="675.7944862155389" y="212.0" />
+      <point x="35.25" y="14.5" />
+    </edge>
+    <edge source="radio.client.audio.PlayingThread" target="radio.client.ui.WaveFormPanel">
+      <point x="0.0" y="-14.5" />
+      <point x="640.5444862155389" y="133.0" />
+      <point x="693.0444862155389" y="133.0" />
+      <point x="-35.25" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.StreamingSongPanel" target="radio.client.ui.objects.SongPanelColors">
+      <point x="44.25" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.App" target="radio.client.communication.ServerConnector">
+      <point x="-29.571428571428555" y="-14.5" />
+      <point x="358.9119674185465" y="326.0" />
+      <point x="77.5" y="326.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.WaveFormPanel" target="radio.client.ui.objects.MediaPanelColors">
+      <point x="0.0" y="-14.5" />
+      <point x="728.2944862155389" y="54.0" />
+      <point x="305.1503759398497" y="54.0" />
+      <point x="54.33333333333334" y="14.5" />
+    </edge>
+    <edge source="radio.client.WriteToLineThread" target="radio.client.ui.WaveFormPanel">
+      <point x="0.0" y="-14.5" />
+      <point x="816.0444862155389" y="133.0" />
+      <point x="763.5444862155389" y="133.0" />
+      <point x="35.25" y="14.5" />
+    </edge>
+    <edge source="radio.client.ui.App.SongEndLineListener" target="radio.client.ui.App">
+      <point x="46.0" y="14.5" />
+      <point x="620.2753759398497" y="306.0" />
+      <point x="408.19768170426084" y="306.0" />
+      <point x="19.714285714285722" y="-14.5" />
+    </edge>
+    <edge source="radio.client.ui.StreamingSongPanel" target="radio.client.ui.objects.MediaPanelColors">
+      <point x="-44.25" y="-14.5" />
+      <point x="220.50000000000003" y="54.0" />
+      <point x="250.8170426065164" y="54.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9660729431721798" x="579.5" y="224.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

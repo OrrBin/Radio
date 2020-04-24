@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>radio.server</OriginalElement>
+  <nodes>
+    <node x="140.25" y="158.0">radio.server.communication.ListenerService</node>
+    <node x="147.25" y="79.0">radio.server.communication.ClientHandler</node>
+    <node x="226.0" y="0.0">radio.server.communication.SendSongAudioDataThread</node>
+    <node x="0.0" y="232.0">radio.server.ServerConfig</node>
+    <node x="0.0" y="0.0">radio.server.communication.SendSongDetailsThreard</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="radio.server.communication.ListenerService" target="radio.server.communication.ClientHandler">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="radio.server.communication.ClientHandler" target="radio.server.communication.SendSongDetailsThreard">
+      <point x="-35.25" y="-14.5" />
+      <point x="182.5" y="54.0" />
+      <point x="103.0" y="54.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="radio.server.communication.ClientHandler" target="radio.server.communication.SendSongAudioDataThread">
+      <point x="35.25" y="-14.5" />
+      <point x="253.0" y="54.0" />
+      <point x="332.5" y="54.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="219.5" y="130.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
