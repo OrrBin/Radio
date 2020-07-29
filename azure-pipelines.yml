@@ -13,7 +13,17 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+# Azure file copy
+# Copy files to Azure Blob Storage or virtual machines
+- task: AzureFileCopy@4
+  inputs:
+    sourcePath: /**/server.jar
+    azureSubscription: Tri Sandbox
+    destination: azureVMs
+    storage: ronistorage
+    resourceGroup: roniRG
+    machineNames: ronismachine
+    vmsAdminUserName: radmon@microsoft.com
+    vmsAdminPassword: t78~!@#w:8d9
+    targetPath: c:\
+
