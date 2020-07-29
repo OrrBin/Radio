@@ -23,7 +23,7 @@ steps:
     storage: ronistorage
     resourceGroup: roniRG
     machineNames: ronismachine
-    vmsAdminUserName: radmon@microsoft.com
-    vmsAdminPassword: t78~!@#w:8d9
+    vmsAdminUserName: radmon
+    vmsAdminPassword: password
     targetPath: c:\
 
