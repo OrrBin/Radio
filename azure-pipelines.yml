@@ -1,0 +1,30 @@
+- task: AzureFileCopy@4
+  inputs:
+    SourcePath: 'build/radio-server.jar'
+    azureSubscription: 'Tri Sandbox (6ae0e7b9-7918-47f4-b086-147ccd91707a)'
+    Destination: 'AzureVMs'
+    storage: 'ronistorage'
+    resourceGroup: 'roniRG'
+    vmsAdminUserName: 'roni'
+    vmsAdminPassword: 'password'
+    TargetPath: 'c:\'
+
+- task: AzureFileCopy@4
+  inputs:
+    SourcePath: 'music/*'
+    azureSubscription: 'Tri Sandbox (6ae0e7b9-7918-47f4-b086-147ccd91707a)'
+    Destination: 'AzureVMs'
+    storage: 'ronistorage'
+    resourceGroup: 'roniRG'
+    vmsAdminUserName: 'roni'
+    vmsAdminPassword: 'password'
+    TargetPath: 'c:\music\'
+
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '8'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+- task: CmdLine@2
+  inputs:
+    script: 'java -jar -p 5000'
