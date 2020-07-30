@@ -1,5 +1,7 @@
 # Azure file copy
 # Copy files to Azure Blob Storage or virtual machines
+pool:
+  vmImage: 'windows-latest'
 
 steps:
 - task: AzureFileCopy@4
